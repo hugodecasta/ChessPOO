@@ -27,6 +27,7 @@ public class PieceGraphique extends ElementGraphique
 {
     Piece piece;
     Point oldPos;
+    boolean oldMange;
 
     public PieceGraphique(Piece piece,int x,int y,int size) 
     {
@@ -48,53 +49,12 @@ public class PieceGraphique extends ElementGraphique
         addElement(frontText);
     }
     
-    public void moveToAnim(int x1,int y1)
-    {        
-        new AnimationTimer()
-        {
-            int xStart = 0;
-            int yStart = 0;
-            int xGoal = x1-x;
-            int yGoal = y1-y;
-            int time = 0;
-            int duration = 10;
-            
-            @Override
-            public void handle(long now)
-            {
-                if(time == 0)
-                {
-                    System.out.println(xGoal);
-                }
-                if(time == duration)
-                {
-                    moveTo(x1,y1);
-                    this.stop();
-                }
-                else
-                {
-                    System.out.println(expo(time, xStart, xGoal, duration));
-                    double xx = x + expo(time, xStart, xGoal, duration);
-                    double yy = y + expo(time, yStart, yGoal, duration);
-                    moveTo((int)xx,(int)yy);
-                    time++;
-                }
-            }
-            
-            public float expo(float t,float b , float c, float d) {
-		if (t==0) return b;
-		if (t==d) return b+c;
-		if ((t/=d/2) < 1) return c/2 * (float)Math.pow(2, 10 * (t - 1)) + b;
-		return c/2 * (-(float)Math.pow(2, -10 * --t) + 2) + b;
-	}
-        }.start();
-    }
-    
     public Point updatePiece()
     {
         Point pos = null;
-        if(piece.pos != oldPos)
+        if(piece.pos != oldPos || oldMange != piece.isMange())
             pos = piece.pos;
+        oldMange = piece.isMange();
         oldPos = piece.pos;
         return pos;
     }

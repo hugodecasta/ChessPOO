@@ -94,7 +94,11 @@ public class ChessPOO extends Application
             Point p = pg.updatePiece();
             if(p!=null)
             {
-                pg.moveToAnim(getXFromI(p.x), getYFromJ(p.y));
+                pg.moveToAnim(getXFromI(p.x), getYFromJ(p.y),10);
+                if(pg.oldMange)
+                {
+                    pg.moveToAnim(-caseSize, -caseSize,50);
+                }
             }
         }
     }

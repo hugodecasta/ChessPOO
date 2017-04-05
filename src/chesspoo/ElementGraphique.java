@@ -5,6 +5,7 @@
  */
 package chesspoo;
 
+import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
@@ -75,6 +76,48 @@ public class ElementGraphique
         this.y = y;
         pane.setLayoutX(x);
         pane.setLayoutY(y);
+    }
+    public void moveToAnim(int x1,int y1,int steps)
+    {        
+        new AnimationTimer()
+        {
+            int xStart = 0;
+            int yStart = 0;
+            int xGoal = x1-x;
+            int yGoal = y1-y;
+            int time = 0;
+            int startXX = x;
+            int startYY = y;
+            int duration = steps;
+            
+            @Override
+            public void handle(long now)
+            {
+                if(time == 0)
+                {
+                    System.out.println(xGoal);
+                }
+                if(time == duration)
+                {
+                    moveTo(x1,y1);
+                    this.stop();
+                }
+                else
+                {
+                    double xx = startXX + expo(time, xStart, xGoal, duration);
+                    double yy = startYY + expo(time, yStart, yGoal, duration);
+                    moveTo((int)xx,(int)yy);
+                    time++;
+                }
+            }
+            
+            public float expo(float t,float b , float c, float d) {
+		if (t==0) return b;
+		if (t==d) return b+c;
+		if ((t/=d/2) < 1) return c/2 * (float)Math.pow(2, 10 * (t - 1)) + b;
+		return c/2 * (-(float)Math.pow(2, -10 * --t) + 2) + b;
+	}
+        }.start();
     }
     
     public void select()
