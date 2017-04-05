@@ -32,6 +32,7 @@ import javafx.stage.Stage;
  */
 public class ChessPOO extends Application
 {
+    //-------------------------------------------------
     Piece pieceSelected;
     Point caseSelected;
     JoueurEchecs JB,JN;
@@ -39,7 +40,7 @@ public class ChessPOO extends Application
     Thread jeu;
     int width = 500;
     int height = 500;
-    
+    //-------------------------------------------------
     @Override
     public void start(Stage primaryStage)
     {
@@ -57,16 +58,6 @@ public class ChessPOO extends Application
         };
         jeu.start();
         
-        
-        /*Pane root = new Pane();
-        initEchiquierFX(root);
-        
-        //Scene scene = new Scene(root, width, height);
-        primaryStage.setTitle("Test sur l'opacité de la fenêtre"); 
-        //primaryStage.setScene(scene);        
-        primaryStage.show();
-        //primaryStage.setOpacity(0.5);*/
-        
         AnchorPane root = new AnchorPane();
         initEchiquierFX(root);
         Scene scene = new Scene(root);
@@ -74,13 +65,13 @@ public class ChessPOO extends Application
         scene.setRoot(root);
         primaryStage.show();
     }
-    
+    //-------------------------------------------------
     @Override
     public void stop()
     {
         jeu.stop();
     }
-    
+    //-------------------------------------------------
     public Piece pieceSelected()
     {
         return pieceSelected;
@@ -94,7 +85,7 @@ public class ChessPOO extends Application
     {
         System.out.println(x+" - "+y);
     }
-    
+    //-------------------------------------------------
     public void initEchiquierFX(Pane root)
     {
         int caseSize = width/8;
@@ -143,6 +134,7 @@ public class ChessPOO extends Application
         }
     }
 
+    //-------------------------------------------------
     /**
      * @param args the command line arguments
      */
