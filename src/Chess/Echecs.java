@@ -70,9 +70,13 @@ public class Echecs
                     System.out.println("Coup validé");
                     coup.piece.pos = coup.sortie;
                 }
-                else
+                else if (pieceCoupPossible != null)
                 {
                     // manger la pièce
+                    System.out.println("Coup validé");
+                    pieceCoupPossible.seFaitManger();
+                    
+                    coup.piece.pos = coup.sortie;
                 }
             }            
         }

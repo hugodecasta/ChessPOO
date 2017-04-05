@@ -57,17 +57,12 @@ public class Echiquier
     public Piece coupsPossible(CoupEchecs coup)
     {
         ArrayList<Point> coupsPossibles = coup.piece.pointsPossibles();
-        System.out.println(coup.sortie);
-        System.out.println("Salut");
-
         for (Point pt : coupsPossibles)
         {
-            System.out.println(pt);
             if (pt.x == coup.sortie.x && pt.y == coup.sortie.y)
             {
                 //on vérifie si la case est occupée
                 Piece pieceCible = pointOccupe(coup.sortie);
-                System.out.println("Coucou");
                 boolean cibleNulle = (pieceCible == null); 
                 boolean memeCouleur = (!cibleNulle && (pieceCible.isBlanc() == coup.piece.isBlanc()));
                 if (memeCouleur)
@@ -80,13 +75,35 @@ public class Echiquier
                     else
                         return pieceCible;
                 }
-                if (coup.piece instanceof PieceRoi)
+                else if (coup.piece instanceof PieceRoi)
                 {
                     if (cibleNulle)
                         return coup.piece;
                     else
                         return pieceCible;
                 } 
+                else if (coup.piece instanceof PiecePion)
+                {
+                    if (coup.sortie.x == coup.piece.pos.x)
+                    {
+                        if (cibleNulle)
+                        {
+                            int dir = coup.piece.isBlanc() ? 1 : -1;
+                            int yDepart = coup.piece.isBlanc() ? 1 : 6;  
+                            if (coup.sortie.y == coup.piece.pos.y + dir || coup.piece.pos.y == yDepart)
+                                return coup.piece;
+                        }
+                        return null;                         
+                    }
+                    else
+                    {
+                        if (cibleNulle)
+                            return null;
+                        else
+                            return pieceCible;
+                    }
+                }
+                
             }
         }
         return null;
