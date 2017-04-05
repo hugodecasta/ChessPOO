@@ -27,7 +27,7 @@ public class PieceGraphique extends ElementGraphique
 
     public PieceGraphique(Piece piece,int x,int y,int size) 
     {
-        super(x,y,size);
+        super(x,y,size,Color.rgb(0,0,0,0),Color.rgb(255,0,255),Color.rgb(255,0,255,0.5));
         this.piece = piece;
         
         Color col = piece.isBlanc()?Color.WHITE:Color.BLACK;

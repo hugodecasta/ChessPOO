@@ -40,7 +40,7 @@ public class JoueurEchecsHumain extends JoueurEchecs
                 Logger.getLogger(JoueurEchecsHumain.class.getName()).log(Level.SEVERE, null, ex);
             } 
         }
-        while(affichage.getCaseSelected()==null)
+        while(affichage.getSelectedPoint()==null)
         {
             try {
                 Thread.sleep(10);
@@ -49,7 +49,7 @@ public class JoueurEchecsHumain extends JoueurEchecs
             } 
         }
         Piece p = affichage.getPieceSelected();
-        Point pp = affichage.caseSelected;
+        Point pp = affichage.getSelectedPoint();
         affichage.resetSelections();
         return new CoupEchecs(p, pp);
     }

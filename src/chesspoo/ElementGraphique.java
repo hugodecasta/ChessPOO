@@ -25,12 +25,16 @@ public class ElementGraphique
     Color selectedColor,hoverColor,unselectedColor;
     final Rectangle backRect;
     
-    public ElementGraphique(int x, int y, int size)
+    public ElementGraphique(int x, int y, int size, Color back, Color sel, Color hover)
     {
         pane = new StackPane();
-        selectedColor = Color.RED;
-        hoverColor = Color.BEIGE;
-        unselectedColor = Color.GRAY;
+        pane.setLayoutX(x);
+        pane.setLayoutY(y);
+        pane.setMinSize(size,size);
+        pane.setMaxSize(size,size);
+        selectedColor = sel;
+        hoverColor = hover;
+        unselectedColor = back;
         
         backRect = new Rectangle(0,0,size,size);
         backRect.setFill(unselectedColor);
@@ -40,7 +44,8 @@ public class ElementGraphique
         {
             public void handle(MouseEvent e)
             {
-                backRect.setFill(hoverColor);
+                if(!isSelected)
+                    backRect.setFill(hoverColor);
             }
         }
         );

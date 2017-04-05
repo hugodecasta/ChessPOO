@@ -35,7 +35,8 @@ public class ChessPOO extends Application
 {
     //-------------------------------------------------
     PieceGraphique pieceSelected;
-    Point caseSelected;
+    Point selectedPoint;
+    CaseGraphique caseSelected;
     JoueurEchecs JB,JN;
     Echecs jeuEchecs;
     Thread jeu;
@@ -80,33 +81,61 @@ public class ChessPOO extends Application
             return null;
         return pieceSelected.piece;
     }
+    public Point getSelectedPoint()
+    {
+        return selectedPoint;
+    }
     public Point getCaseSelected()
     {
-        return caseSelected;
+        if(caseSelected==null)
+            return null;
+        return caseSelected.place;
     }
     
-    public void caseClicked(int x, int y)
+    public void caseClicked(CaseGraphique cg)
     {
-        caseSelected = new Point(x,y);
+        caseSelected = cg;
+        selectedPoint = cg.place;
+        cg.select();
     }
     public void pieceClicked(PieceGraphique pg)
     {
-        if(pieceSelected!=null && pg.piece != pieceSelected.piece)
+        /*if(pieceSelected!=null && pg.piece != pieceSelected.piece)
         {
             caseClicked(pg.piece.pos.x,pg.piece.pos.y);
         }
+        else*/
+        if(pieceSelected!=null)
+        {
+            if(pieceSelected.piece.isBlanc() == pg.piece.isBlanc())
+            {
+                pieceSelected.unselect();
+                pieceSelected = pg;
+                pg.select();
+            }
+            else
+            {
+                selectedPoint = pg.piece.pos;
+            }
+        }
         else
+        {
             pieceSelected = pg;
-        pg.select();
+            pg.select();
+        }
     }
     public void resetSelections()
     {
         if(pieceSelected!=null)
         {
             pieceSelected.unselect();
+        }if(caseSelected!=null)
+        {
+            caseSelected .unselect();
         }
         caseSelected = null;
         pieceSelected = null;
+        selectedPoint = null;
     }
     //-------------------------------------------------
     public void initEchiquierFX(Pane root)
@@ -119,30 +148,14 @@ public class ChessPOO extends Application
                 int j2 = 7-j;
                 int x = i*caseSize;
                 int y = j2*caseSize;
-                final Rectangle rect = new Rectangle(x, y, caseSize, caseSize);
                 final Color backColor = (i + j2)%2==0?Color.rgb(238, 238, 210):Color.rgb(118, 150, 86);
+                
+                /*final Rectangle rect = new Rectangle(x, y, caseSize, caseSize);
                 rect.setFill(backColor);
                 
                 final int i1 = i;
                 final int j1 = j;
-                rect.setOnMouseEntered(
-                new EventHandler<MouseEvent>()
-                {
-                    public void handle(MouseEvent e)
-                    {
-                        rect.setFill(Color.RED);
-                    }
-                }
-                );
-                rect.setOnMouseExited(
-                new EventHandler<MouseEvent>()
-                {
-                    public void handle(MouseEvent e)
-                    {
-                        rect.setFill(backColor);
-                    }
-                }
-                );
+                
                 rect.setOnMouseClicked(
                 new EventHandler<MouseEvent>()
                 {
@@ -152,8 +165,21 @@ public class ChessPOO extends Application
                     }
                 }
                 );
-                root.getChildren().add(rect);
-            }
+                root.getChildren().add(rect);*/
+                
+                final CaseGraphique cg = new CaseGraphique(new Point(i,j2),x,y,caseSize,backColor);
+                Pane pan = cg.getGraphics();
+                pan.setOnMouseClicked(
+                new EventHandler<MouseEvent>()
+                {
+                    public void handle(MouseEvent e)
+                    {
+                        caseClicked(cg);
+                    }
+                }
+                );
+                root.getChildren().add(pan);
+                }
         }
         
         piecesG = new ArrayList<>();
