@@ -6,29 +6,40 @@
 package chesspoo;
 
 import Chess.Piece;
+import javafx.event.EventHandler;
+import javafx.scene.Group;
 import javafx.scene.image.Image;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
 /**
  *
  * @author p1608557
  */
-public class PieceGraphique
+public class PieceGraphique extends ElementGraphique
 {
     Piece piece;
-    int x,y;
-    Image image;
-    Rectangle rect;
 
-    public PieceGraphique(Piece piece) 
+    public PieceGraphique(Piece piece,int x,int y,int size) 
     {
+        super(x,y,size);
         this.piece = piece;
+        
+        Color col = piece.isBlanc()?Color.WHITE:Color.BLACK;
+        
+        Text backText = new Text(piece.toString().charAt(1)+"");
+        backText.setFont(new Font(50));
+        backText.setFill(col);
+        Text frontText = new Text(piece.toString().charAt(0)+"");
+        frontText.setFont(new Font(50));
+        frontText.setFill(Color.BLACK);
+        
+        addElement(backText);
+        addElement(frontText);
     }
-    
-    public Rectangle getRect()
-    {
-        return rect;
-    }
-    
-    
 }

@@ -34,7 +34,7 @@ import javafx.stage.Stage;
 public class ChessPOO extends Application
 {
     //-------------------------------------------------
-    Piece pieceSelected;
+    PieceGraphique pieceSelected;
     Point caseSelected;
     JoueurEchecs JB,JN;
     Echecs jeuEchecs;
@@ -74,18 +74,39 @@ public class ChessPOO extends Application
         jeu.stop();
     }
     //-------------------------------------------------
-    public Piece pieceSelected()
+    public Piece getPieceSelected()
     {
-        return pieceSelected;
+        if(pieceSelected==null)
+            return null;
+        return pieceSelected.piece;
     }
-    public Point caseSelected()
+    public Point getCaseSelected()
     {
-        return pieceSelected.pos==caseSelected?null:caseSelected;
+        return caseSelected;
     }
     
     public void caseClicked(int x, int y)
     {
-        System.out.println(x+" - "+y);
+        caseSelected = new Point(x,y);
+    }
+    public void pieceClicked(PieceGraphique pg)
+    {
+        if(pieceSelected!=null && pg.piece != pieceSelected.piece)
+        {
+            caseClicked(pg.piece.pos.x,pg.piece.pos.y);
+        }
+        else
+            pieceSelected = pg;
+        pg.select();
+    }
+    public void resetSelections()
+    {
+        if(pieceSelected!=null)
+        {
+            pieceSelected.unselect();
+        }
+        caseSelected = null;
+        pieceSelected = null;
     }
     //-------------------------------------------------
     public void initEchiquierFX(Pane root)
@@ -138,9 +159,22 @@ public class ChessPOO extends Application
         piecesG = new ArrayList<>();
         for(Piece p : jeuEchecs.getEchiquier().getPieces())
         {
-            final PieceGraphique pg = new PieceGraphique(p);
+            int j2 = 7-p.pos.y;
+            int x = p.pos.x*caseSize;
+            int y = j2*caseSize;
+            final PieceGraphique pg = new PieceGraphique(p,x,y,caseSize);
             piecesG.add(pg);
-            root.getChildren().add(pg.getRect());
+            Pane pan = pg.getGraphics();
+            pan.setOnMouseClicked(
+            new EventHandler<MouseEvent>()
+            {
+                public void handle(MouseEvent e)
+                {
+                    pieceClicked(pg);
+                }
+            }
+            );
+            root.getChildren().add(pan);
         }
     }
 
