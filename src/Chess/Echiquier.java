@@ -54,10 +54,10 @@ public class Echiquier
         }
     }
     
-    public ArrayList<Point> coupsPossibles(Piece piece)
+    public boolean coupsPossible(CoupEchecs coup)
     {
-        ArrayList<Point> ret = piece.pointsPossibles();
-        return ret;
+        
+        return true;
     }
     
     @Override

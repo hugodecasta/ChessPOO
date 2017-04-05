@@ -45,6 +45,11 @@ public class Echecs
             return joueurB;
     }
     
+    public Echiquier getEchiquier()
+    {
+        return echiquier;
+    }
+    
     public JoueurEchecs partie()
     {
         while(!partieTerminee())
@@ -52,10 +57,10 @@ public class Echecs
             joueur = joueurSuivant();
             System.out.println("Le joueur suivant a été selectionné");
             CoupEchecs coup = joueur.getCoup(echiquier);
-            System.out.println("Essaie du coup Piece: "+coup.piece.toString().charAt(1));
-            System.out.println("Essaie du coup Posit: "+coup.sortie.x+" - "+coup.sortie.y);
-            ArrayList<Point> coupsPossibles = echiquier.coupsPossibles(coup.piece);
-            if(coupsPossibles.contains(coup.sortie))
+            System.out.println("Essai du coup Piece: "+coup.piece.toString().charAt(1));
+            System.out.println("Essai du coup Posit: "+coup.sortie.x+" - "+coup.sortie.y);
+            boolean coupEstPossible = echiquier.coupsPossible(coup);
+            if(coupEstPossible)
             {
                 System.out.println("Coup validé");
                 coup.piece.pos = coup.sortie;

@@ -9,6 +9,7 @@ import Chess.Echecs;
 import Chess.JoueurEchecs;
 import Chess.Piece;
 import Chess.Point;
+import java.util.ArrayList;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -40,6 +41,7 @@ public class ChessPOO extends Application
     Thread jeu;
     int width = 500;
     int height = 500;
+    ArrayList<PieceGraphique>piecesG;
     //-------------------------------------------------
     @Override
     public void start(Stage primaryStage)
@@ -131,6 +133,14 @@ public class ChessPOO extends Application
                 );
                 root.getChildren().add(rect);
             }
+        }
+        
+        piecesG = new ArrayList<>();
+        for(Piece p : jeuEchecs.getEchiquier().getPieces())
+        {
+            final PieceGraphique pg = new PieceGraphique(p);
+            piecesG.add(pg);
+            root.getChildren().add(pg.getRect());
         }
     }
 
