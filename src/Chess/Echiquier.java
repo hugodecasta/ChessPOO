@@ -54,10 +54,52 @@ public class Echiquier
         }
     }
     
-    public boolean coupsPossible(CoupEchecs coup)
+    public Piece coupsPossible(CoupEchecs coup)
     {
-        
-        return true;
+        ArrayList<Point> coupsPossibles = coup.piece.pointsPossibles();
+        System.out.println(coup.sortie);
+        System.out.println("Salut");
+
+        for (Point pt : coupsPossibles)
+        {
+            System.out.println(pt);
+            if (pt.x == coup.sortie.x && pt.y == coup.sortie.y)
+            {
+                //on vérifie si la case est occupée
+                Piece pieceCible = pointOccupe(coup.sortie);
+                System.out.println("Coucou");
+                boolean cibleNulle = (pieceCible == null); 
+                boolean memeCouleur = (!cibleNulle && (pieceCible.isBlanc() == coup.piece.isBlanc()));
+                if (memeCouleur)
+                    return null; // on ne mange pas ses potes
+
+                if (coup.piece instanceof PieceCavalier)
+                {
+                    if (cibleNulle)
+                        return coup.piece;
+                    else
+                        return pieceCible;
+                }
+                if (coup.piece instanceof PieceRoi)
+                {
+                    if (cibleNulle)
+                        return coup.piece;
+                    else
+                        return pieceCible;
+                } 
+            }
+        }
+        return null;
+    }
+    
+    public Piece pointOccupe (Point point)
+    {
+        for (Piece p : pieces)
+        {
+            if (p.pos == point)
+                return p;
+        }
+        return null;
     }
     
     @Override
