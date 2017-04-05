@@ -49,27 +49,44 @@ public class PieceGraphique extends ElementGraphique
     }
     
     public void moveToAnim(int x1,int y1)
-    {
-        final int step = 10;
-        final int addX = (x1-this.x)/step;
-        final int addY = (y1-this.y)/step;
+    {        
         new AnimationTimer()
         {
+            int xStart = 0;
+            int yStart = 0;
+            int xGoal = x1-x;
+            int yGoal = y1-y;
             int time = 0;
+            int duration = 10;
+            
             @Override
             public void handle(long now)
             {
-                if(time == step)
+                if(time == 0)
+                {
+                    System.out.println(xGoal);
+                }
+                if(time == duration)
                 {
                     moveTo(x1,y1);
                     this.stop();
                 }
                 else
                 {
-                    moveTo(x+addX,y+addY);
+                    System.out.println(expo(time, xStart, xGoal, duration));
+                    double xx = x + expo(time, xStart, xGoal, duration);
+                    double yy = y + expo(time, yStart, yGoal, duration);
+                    moveTo((int)xx,(int)yy);
                     time++;
                 }
             }
+            
+            public float expo(float t,float b , float c, float d) {
+		if (t==0) return b;
+		if (t==d) return b+c;
+		if ((t/=d/2) < 1) return c/2 * (float)Math.pow(2, 10 * (t - 1)) + b;
+		return c/2 * (-(float)Math.pow(2, -10 * --t) + 2) + b;
+	}
         }.start();
     }
     
