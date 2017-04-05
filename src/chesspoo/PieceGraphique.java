@@ -7,6 +7,7 @@ package chesspoo;
 
 import Chess.Piece;
 import Chess.Point;
+import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
@@ -45,6 +46,31 @@ public class PieceGraphique extends ElementGraphique
         
         addElement(backText);
         addElement(frontText);
+    }
+    
+    public void moveToAnim(int x1,int y1)
+    {
+        final int step = 10;
+        final int addX = (x1-this.x)/step;
+        final int addY = (y1-this.y)/step;
+        new AnimationTimer()
+        {
+            int time = 0;
+            @Override
+            public void handle(long now)
+            {
+                if(time == step)
+                {
+                    moveTo(x1,y1);
+                    this.stop();
+                }
+                else
+                {
+                    moveTo(x+addX,y+addY);
+                    time++;
+                }
+            }
+        }.start();
     }
     
     public Point updatePiece()

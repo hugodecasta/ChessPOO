@@ -49,8 +49,8 @@ public class ChessPOO extends Application
     @Override
     public void start(Stage primaryStage)
     {
-        JB = new JoueurEchecsHumain(this);
-        JN = new JoueurEchecsHumain(this);
+        JB = new JoueurEchecsHumain(this,true);
+        JN = new JoueurEchecsHumain(this,false);
         jeuEchecs = new Echecs(JB,JN);
         jeuEchecs.initEchecs();
         
@@ -94,7 +94,7 @@ public class ChessPOO extends Application
             Point p = pg.updatePiece();
             if(p!=null)
             {
-                pg.moveTo(getXFromI(p.x), getYFromJ(p.y));
+                pg.moveToAnim(getXFromI(p.x), getYFromJ(p.y));
             }
         }
     }

@@ -11,9 +11,17 @@ package Chess;
  */
 public abstract class JoueurEchecs
 {
-    public JoueurEchecs()
+    protected boolean isBlanc;
+            
+    public JoueurEchecs(boolean isBlanc)
     {
+        this.isBlanc = isBlanc;
     }
     
     public abstract CoupEchecs getCoup(Echiquier echiquier);
+    
+    public boolean isBlanc()
+    {
+        return isBlanc;
+    }
 }

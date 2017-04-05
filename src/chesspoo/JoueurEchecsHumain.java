@@ -22,23 +22,33 @@ public class JoueurEchecsHumain extends JoueurEchecs
 {
     ChessPOO affichage;
     
-    public JoueurEchecsHumain(ChessPOO affichage)
+    public JoueurEchecsHumain(ChessPOO affichage,boolean isBlanc)
     {
+        super(isBlanc);
         this.affichage = affichage;
     }
     
     @Override
     public CoupEchecs getCoup(Echiquier echiquier)
-    {
-        while(affichage.getPieceSelected()==null)
+    { 
+        boolean colorGood = false;
+        while(!colorGood)
         {
-            if(affichage.getCaseSelected()!=null)
+            while(affichage.getPieceSelected()==null)
+            {
+                if(affichage.getCaseSelected()!=null)
+                    affichage.resetSelections();
+                try {
+                    Thread.sleep(10);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(JoueurEchecsHumain.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            colorGood = affichage.getPieceSelected().isBlanc() == this.isBlanc();
+            if(!colorGood)
+            {
                 affichage.resetSelections();
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(JoueurEchecsHumain.class.getName()).log(Level.SEVERE, null, ex);
-            } 
+            }
         }
         while(affichage.getSelectedPoint()==null)
         {
