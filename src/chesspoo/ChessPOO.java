@@ -43,6 +43,7 @@ public class ChessPOO extends Application
     Thread jeu;
     int width = 500;
     int height = 500;
+    int caseSize;
     ArrayList<PieceGraphique>piecesG;
     //-------------------------------------------------
     @Override
@@ -52,6 +53,8 @@ public class ChessPOO extends Application
         JN = new JoueurEchecsHumain(this);
         jeuEchecs = new Echecs(JB,JN);
         jeuEchecs.initEchecs();
+        
+        caseSize = width/8;
         
         jeu = new Thread(){
             @Override
@@ -88,6 +91,11 @@ public class ChessPOO extends Application
     {
         for(PieceGraphique pg : piecesG)
         {
+            Point p = pg.updatePiece();
+            if(p!=null)
+            {
+                pg.moveTo(getXFromI(p.x), getYFromJ(p.y));
+            }
         }
     }
     //-------------------------------------------------
@@ -156,7 +164,6 @@ public class ChessPOO extends Application
     //-------------------------------------------------
     public void initEchiquierFX(Pane root)
     {
-        int caseSize = width/8;
         for(int i=0;i<8;++i)
         {
             for(int j=0;j<8;++j)
@@ -201,6 +208,16 @@ public class ChessPOO extends Application
             );
             root.getChildren().add(pan);
         }
+    }
+    
+    public int getXFromI(int i)
+    {
+        return i*caseSize;
+    }
+    public int getYFromJ(int j)
+    {
+        int j2 = 7-j;
+        return j2*caseSize;
     }
 
     //-------------------------------------------------

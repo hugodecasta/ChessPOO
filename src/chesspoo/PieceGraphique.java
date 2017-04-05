@@ -46,4 +46,13 @@ public class PieceGraphique extends ElementGraphique
         addElement(backText);
         addElement(frontText);
     }
+    
+    public Point updatePiece()
+    {
+        Point pos = null;
+        if(piece.pos != oldPos)
+            pos = piece.pos;
+        oldPos = piece.pos;
+        return pos;
+    }
 }

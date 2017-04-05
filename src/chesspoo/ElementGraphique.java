@@ -28,8 +28,7 @@ public class ElementGraphique
     public ElementGraphique(int x, int y, int size, Color back, Color sel, Color hover)
     {
         pane = new StackPane();
-        pane.setLayoutX(x);
-        pane.setLayoutY(y);
+        moveTo(x, y);
         pane.setMinSize(size,size);
         pane.setMaxSize(size,size);
         selectedColor = sel;
@@ -69,6 +68,13 @@ public class ElementGraphique
     public Pane getGraphics()
     {
         return pane;
+    }
+    public void moveTo(int x, int y)
+    {
+        this.x = x;
+        this.y = y;
+        pane.setLayoutX(x);
+        pane.setLayoutY(y);
     }
     
     public void select()
