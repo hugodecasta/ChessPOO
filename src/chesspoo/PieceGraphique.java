@@ -6,6 +6,7 @@
 package chesspoo;
 
 import Chess.Piece;
+import Chess.Point;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
@@ -24,11 +25,14 @@ import javafx.scene.text.Text;
 public class PieceGraphique extends ElementGraphique
 {
     Piece piece;
+    Point oldPos;
 
     public PieceGraphique(Piece piece,int x,int y,int size) 
     {
-        super(x,y,size,Color.rgb(0,0,0,0),Color.rgb(255,0,255),Color.rgb(255,0,255,0.5));
+        
+        super(x,y,size,Color.rgb(0,0,0,0),Color.rgb(241, 196, 15,1.0),Color.rgb(241, 196, 15,0.5));
         this.piece = piece;
+        oldPos = piece.pos;
         
         Color col = piece.isBlanc()?Color.WHITE:Color.BLACK;
         

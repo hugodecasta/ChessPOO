@@ -19,7 +19,7 @@ public class CaseGraphique extends ElementGraphique
     
     public CaseGraphique(Point p,int x,int y, int size, Color backColor)
     {
-        super(x,y,size,backColor,Color.RED,Color.rgb(255,0,0,0.5));
+        super(x,y,size,backColor,Color.rgb(241, 196, 15,1.0),Color.rgb(241, 196, 15,0.5));
         place = p;
     }
     

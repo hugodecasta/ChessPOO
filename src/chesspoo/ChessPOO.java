@@ -10,6 +10,7 @@ import Chess.JoueurEchecs;
 import Chess.Piece;
 import Chess.Point;
 import java.util.ArrayList;
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
@@ -67,12 +68,27 @@ public class ChessPOO extends Application
         primaryStage.setScene(scene);
         scene.setRoot(root);
         primaryStage.show();
+        
+        new AnimationTimer()
+        {
+            @Override
+            public void handle(long now)
+            {
+                updateGrid();
+            }
+        }.start();
     }
     //-------------------------------------------------
     @Override
     public void stop()
     {
         jeu.stop();
+    }        
+    public void updateGrid()
+    {
+        for(PieceGraphique pg : piecesG)
+        {
+        }
     }
     //-------------------------------------------------
     public Piece getPieceSelected()
@@ -147,25 +163,8 @@ public class ChessPOO extends Application
             {
                 int j2 = 7-j;
                 int x = i*caseSize;
-                int y = j2*caseSize;
+                int y = j*caseSize;
                 final Color backColor = (i + j2)%2==0?Color.rgb(238, 238, 210):Color.rgb(118, 150, 86);
-                
-                /*final Rectangle rect = new Rectangle(x, y, caseSize, caseSize);
-                rect.setFill(backColor);
-                
-                final int i1 = i;
-                final int j1 = j;
-                
-                rect.setOnMouseClicked(
-                new EventHandler<MouseEvent>()
-                {
-                    public void handle(MouseEvent e)
-                    {
-                        caseClicked(i1,j1);
-                    }
-                }
-                );
-                root.getChildren().add(rect);*/
                 
                 final CaseGraphique cg = new CaseGraphique(new Point(i,j2),x,y,caseSize,backColor);
                 Pane pan = cg.getGraphics();
