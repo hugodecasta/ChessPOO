@@ -13,6 +13,7 @@ import Chess.Point;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 /**
  *
@@ -24,11 +25,13 @@ public class PromotPanel extends ElementGraphique
     PieceGraphique dame,cavalier,tour,fou;
     public PromotPanel(ChessPOO affichage)
     {
-        super(0, 0, affichage.width, Color.rgb(0,0,0,0.3), Color.rgb(0,0,0,0.3), Color.rgb(0,0,0,0.3));
-        dame = new PieceGraphique(new PieceDame(new Point(0,0), true), affichage.getXFromI(3), affichage.getXFromI(3), affichage.caseSize);
-        cavalier = new PieceGraphique(new PieceCavalier(new Point(0,0), true), affichage.getXFromI(3), affichage.getXFromI(4), affichage.caseSize);
-        tour = new PieceGraphique(new PieceTour(new Point(0,0), true), affichage.getXFromI(4), affichage.getYFromJ(3), affichage.caseSize);
-        fou = new PieceGraphique(new PieceFou(new Point(0,0), true), affichage.getXFromI(4), affichage.getYFromJ(4), affichage.caseSize);
+        super(0, 0, affichage.width, Color.rgb(0,0,0,0.7), Color.rgb(0,0,0,0.7), Color.rgb(0,0,0,0.7));
+        dame = new PieceGraphique(new PieceDame(new Point(0,0), true), affichage.getXFromI(3)+affichage.caseSize/2, affichage.getXFromI(3)+affichage.caseSize/2, affichage.caseSize);
+        cavalier = new PieceGraphique(new PieceCavalier(new Point(0,0), true), affichage.getXFromI(3)+affichage.caseSize/2, affichage.getXFromI(4)+affichage.caseSize/2, affichage.caseSize);
+        tour = new PieceGraphique(new PieceTour(new Point(0,0), true), affichage.getXFromI(4)+affichage.caseSize/2, affichage.getYFromJ(3)+affichage.caseSize/2, affichage.caseSize);
+        fou = new PieceGraphique(new PieceFou(new Point(0,0), true), affichage.getXFromI(4)+affichage.caseSize/2, affichage.getYFromJ(4)+affichage.caseSize/2, affichage.caseSize);
+        int more = affichage.caseSize/2;
+        
         
         dame.getGraphics().setOnMouseClicked(
         new EventHandler<MouseEvent>()
@@ -62,11 +65,14 @@ public class PromotPanel extends ElementGraphique
         cavalier.changePiece(new PieceCavalier(new Point(0,0), isBlanc));
         tour.changePiece(new PieceTour(new Point(0,0), isBlanc));
         fou.changePiece(new PieceFou(new Point(0,0), isBlanc));
+        int col = isBlanc?0:255;
+        selectedColor = Color.rgb(col,col,col,0.7);
+        hoverColor = Color.rgb(col,col,col,0.7);
+        unselectedColor = Color.rgb(col,col,col,0.7);
     }
     
     public void appear()
     {
-        System.out.println("coucou");
         fade(true);
         pane.setMouseTransparent(false);
     }

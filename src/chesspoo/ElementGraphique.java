@@ -132,7 +132,7 @@ public class ElementGraphique
             @Override
             public void handle(long now)
             {
-                if(time == duration || opacity==(in?opacityGoal:1-opacityGoal))
+                if(time == duration)
                 {
                     setOpacity(in?opacityGoal:1-opacityGoal);
                     this.stop();

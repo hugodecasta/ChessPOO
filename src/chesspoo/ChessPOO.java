@@ -51,7 +51,7 @@ public class ChessPOO extends Application
     JoueurEchecs lastJoueur;
     ArrayList<PieceGraphique>piecesG;
     ArrayList<Piece>pieceTracker;
-    AnchorPane globalPan;
+    AnchorPane globalPan,echiquierPane;
     //-------------------------------------------------
     @Override
     public void start(Stage primaryStage)
@@ -80,7 +80,9 @@ public class ChessPOO extends Application
         jeu.start();
         
         globalPan = new AnchorPane();
-        initEchiquierFX(globalPan);
+        echiquierPane = new AnchorPane();
+        initEchiquierFX(echiquierPane);
+        globalPan.getChildren().add(echiquierPane);
         Scene scene = new Scene(globalPan);
         primaryStage.setScene(scene);
         scene.setRoot(globalPan);
@@ -255,6 +257,7 @@ public class ChessPOO extends Application
         int x = getXFromI(p.pos.x);
         int y = getYFromJ(p.pos.y);
         final PieceGraphique pg = new PieceGraphique(p,x,y,caseSize);
+        pg.setOpacity(0);
         pg.fade(true);
         piecesG.add(pg);
         pieceTracker.add(p);
