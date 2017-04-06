@@ -19,6 +19,7 @@ public abstract class JoueurEchecs
     }
     
     public abstract CoupEchecs getCoup(Echiquier echiquier);
+    public abstract Piece getPromotion();
     
     public boolean isBlanc()
     {

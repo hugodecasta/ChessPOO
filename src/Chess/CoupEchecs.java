@@ -13,9 +13,11 @@ public class CoupEchecs
 {
     public Piece piece;
     public Point sortie;
-    public CoupEchecs(Piece piece, Point sortie)
+    public JoueurEchecs joueur;
+    public CoupEchecs(Piece piece, Point sortie, JoueurEchecs joueur)
     {
         this.piece = piece;
         this.sortie = sortie;
+        this.joueur = joueur;
     }
 }

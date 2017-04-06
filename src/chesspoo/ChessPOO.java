@@ -45,6 +45,8 @@ public class ChessPOO extends Application
     int height = 500;
     int caseSize;
     ArrayList<PieceGraphique>piecesG;
+    ArrayList<Piece>pieceTracker;
+    AnchorPane globalPan;
     //-------------------------------------------------
     @Override
     public void start(Stage primaryStage)
@@ -53,6 +55,9 @@ public class ChessPOO extends Application
         JN = new JoueurEchecsHumain(this,false);
         jeuEchecs = new Echecs(JB,JN);
         jeuEchecs.initEchecs();
+        
+        piecesG = new ArrayList<>();
+        pieceTracker = new ArrayList<Piece>();
         
         caseSize = width/8;
         
@@ -65,11 +70,11 @@ public class ChessPOO extends Application
         };
         jeu.start();
         
-        AnchorPane root = new AnchorPane();
-        initEchiquierFX(root);
-        Scene scene = new Scene(root);
+        globalPan = new AnchorPane();
+        initEchiquierFX(globalPan);
+        Scene scene = new Scene(globalPan);
         primaryStage.setScene(scene);
-        scene.setRoot(root);
+        scene.setRoot(globalPan);
         primaryStage.show();
         
         new AnimationTimer()
@@ -89,15 +94,26 @@ public class ChessPOO extends Application
     }        
     public void updateGrid()
     {
+        ArrayList<Piece> pp = jeuEchecs.getEchiquier().getPieces();
+        for(Piece p : pp)
+        {
+            if(!pieceTracker.contains(p))
+            {
+                PieceGraphique pg = introducePieceGraphique(p, globalPan);
+            }
+        }
         for(PieceGraphique pg : piecesG)
         {
             Point p = pg.updatePiece();
             if(p!=null)
             {
-                pg.moveToAnim(getXFromI(p.x), getYFromJ(p.y),10);
-                if(pg.oldMange)
+                if(pg.piece.isMange())
                 {
-                    pg.moveToAnim(-caseSize, -caseSize,50);
+                    pg.vanish();
+                }
+                else
+                {
+                    pg.moveToAnim(getXFromI(p.x), getYFromJ(p.y),15);
                 }
             }
         }
@@ -123,8 +139,12 @@ public class ChessPOO extends Application
     public void caseClicked(CaseGraphique cg)
     {
         caseSelected = cg;
-        selectedPoint = cg.place;
+        pointSelect(cg.place);
         cg.select();
+    }
+    public void pointSelect(Point p)
+    {
+        selectedPoint = p;
     }
     public void pieceClicked(PieceGraphique pg)
     {
@@ -143,7 +163,7 @@ public class ChessPOO extends Application
             }
             else
             {
-                selectedPoint = pg.piece.pos;
+                pointSelect(pg.piece.pos);
             }
         }
         else
@@ -192,26 +212,33 @@ public class ChessPOO extends Application
                 }
         }
         
-        piecesG = new ArrayList<>();
         for(Piece p : jeuEchecs.getEchiquier().getPieces())
         {
-            int j2 = 7-p.pos.y;
-            int x = p.pos.x*caseSize;
-            int y = j2*caseSize;
-            final PieceGraphique pg = new PieceGraphique(p,x,y,caseSize);
-            piecesG.add(pg);
-            Pane pan = pg.getGraphics();
-            pan.setOnMouseClicked(
-            new EventHandler<MouseEvent>()
-            {
-                public void handle(MouseEvent e)
-                {
-                    pieceClicked(pg);
-                }
-            }
-            );
-            root.getChildren().add(pan);
+            introducePieceGraphique(p,root);
         }
+    }
+    
+    public PieceGraphique introducePieceGraphique(Piece p,Pane root)
+    {
+        int j2 = 7-p.pos.y;
+        int x = p.pos.x*caseSize;
+        int y = j2*caseSize;
+        final PieceGraphique pg = new PieceGraphique(p,x,y,caseSize);
+        pg.fade(true);
+        piecesG.add(pg);
+        pieceTracker.add(p);
+        Pane pan = pg.getGraphics();
+        pan.setOnMouseClicked(
+        new EventHandler<MouseEvent>()
+        {
+            public void handle(MouseEvent e)
+            {
+                pieceClicked(pg);
+            }
+        }
+        );
+        root.getChildren().add(pan);
+        return pg;
     }
     
     public int getXFromI(int i)

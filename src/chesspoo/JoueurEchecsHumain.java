@@ -9,6 +9,7 @@ import Chess.CoupEchecs;
 import Chess.Echiquier;
 import Chess.JoueurEchecs;
 import Chess.Piece;
+import Chess.PieceDame;
 import Chess.Point;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -61,7 +62,13 @@ public class JoueurEchecsHumain extends JoueurEchecs
         Piece p = affichage.getPieceSelected();
         Point pp = affichage.getSelectedPoint();
         affichage.resetSelections();
-        return new CoupEchecs(p, pp);
+        return new CoupEchecs(p, pp, this);
+    }
+
+    @Override
+    public Piece getPromotion()
+    {
+        return new PieceDame(new Point(0,0), isBlanc);
     }
     
 }

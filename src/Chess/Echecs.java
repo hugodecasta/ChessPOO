@@ -57,27 +57,15 @@ public class Echecs
             joueur = joueurSuivant();
             System.out.println("Le joueur suivant a été selectionné");
             
-            Piece pieceCoupPossible = null;
-            while(pieceCoupPossible == null)
+            boolean pieceCoupPossible = false;
+            while(!pieceCoupPossible)
             {
                 CoupEchecs coup = joueur.getCoup(echiquier);
                 System.out.println("Essai du coup Piece: "+coup.piece.toString().charAt(1));
                 System.out.println("Essai du coup Posit: "+coup.sortie.x+" - "+coup.sortie.y);
                 pieceCoupPossible = echiquier.coupsPossible(coup);
-            
-                if (pieceCoupPossible == coup.piece)
-                {
+                if(pieceCoupPossible)
                     System.out.println("Coup validé");
-                    coup.piece.pos = coup.sortie;
-                }
-                else if (pieceCoupPossible != null)
-                {
-                    // manger la pièce
-                    System.out.println("Coup validé");
-                    pieceCoupPossible.seFaitManger();
-                    
-                    coup.piece.pos = coup.sortie;
-                }
             }            
         }
         return joueur;

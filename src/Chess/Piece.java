@@ -41,6 +41,10 @@ public abstract class Piece
     {
         mange = false;
     }
+    public void aUnePromotion()
+    {
+        mange = true;
+    }
     //-------------------------------------------------------
     public abstract ArrayList<Point> pointsPossibles();
     @Override

@@ -54,34 +54,29 @@ public class Echiquier
         }
     }
     
-    public Piece coupsPossible(CoupEchecs coup)
+    public boolean coupsPossible(CoupEchecs coup)
     {
         ArrayList<Point> coupsPossibles = coup.piece.pointsPossibles();
         for (Point pt : coupsPossibles)
         {
-            if (pt.x == coup.sortie.x && pt.y == coup.sortie.y)
+            if (pt.egale(coup.sortie))
             {
                 //on vérifie si la case est occupée
                 Piece pieceCible = pointOccupe(coup.sortie);
                 boolean cibleNulle = (pieceCible == null); 
                 boolean memeCouleur = (!cibleNulle && (pieceCible.isBlanc() == coup.piece.isBlanc()));
                 if (memeCouleur)
-                    return null; // on ne mange pas ses potes
+                    return false; // on ne mange pas ses potes
 
-                if (coup.piece instanceof PieceCavalier)
+                if (coup.piece instanceof PieceCavalier || 
+                    coup.piece instanceof PieceRoi)
                 {
-                    if (cibleNulle)
-                        return coup.piece;
-                    else
-                        return pieceCible;
+                    if(!cibleNulle)
+                    {
+                        mangerPiece(pieceCible);
+                    }
+                    coup.piece.pos = coup.sortie;
                 }
-                else if (coup.piece instanceof PieceRoi)
-                {
-                    if (cibleNulle)
-                        return coup.piece;
-                    else
-                        return pieceCible;
-                } 
                 else if (coup.piece instanceof PiecePion)
                 {
                     if (coup.sortie.x == coup.piece.pos.x)
@@ -91,29 +86,47 @@ public class Echiquier
                             int dir = coup.piece.isBlanc() ? 1 : -1;
                             int yDepart = coup.piece.isBlanc() ? 1 : 6;  
                             if (coup.sortie.y == coup.piece.pos.y + dir || coup.piece.pos.y == yDepart)
-                                return coup.piece;
+                            coup.piece.pos = coup.sortie;
                         }
-                        return null;                         
+                        else
+                            return false;                         
                     }
                     else
                     {
                         if (cibleNulle)
-                            return null;
+                            return false;
                         else
-                            return pieceCible;
+                        {
+                            coup.piece.pos = coup.sortie;
+                            mangerPiece(pieceCible);
+                        }
+                    }
+                    if(coup.sortie.y == 0 || coup.sortie.y == 7)
+                    {
+                        System.out.println("PROMOTION");
+                        Piece newPiece = coup.joueur.getPromotion();
+                        newPiece.pos = coup.sortie;
+
+                        coup.piece.aUnePromotion();
+                        pieces.remove(coup.piece);
+                        pieces.add(newPiece);
                     }
                 }
-                
+                return true;
             }
         }
-        return null;
+        return false;
     }
-    
+    private void mangerPiece(Piece p)
+    {
+        p.seFaitManger();
+        pieces.remove(p);
+    }
     public Piece pointOccupe (Point point)
     {
         for (Piece p : pieces)
         {
-            if (p.pos == point)
+            if (p.pos.egale(point))
                 return p;
         }
         return null;

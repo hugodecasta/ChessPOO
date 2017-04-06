@@ -23,6 +23,7 @@ public class ElementGraphique
     protected StackPane pane;
     protected boolean isSelected;
     protected int x,y,size;
+    protected float opacity;
     Color selectedColor,hoverColor,unselectedColor;
     final Rectangle backRect;
     
@@ -38,6 +39,7 @@ public class ElementGraphique
         
         backRect = new Rectangle(0,0,size,size);
         backRect.setFill(unselectedColor);
+        setOpacity(1);
         
         pane.setOnMouseEntered(
         new EventHandler<MouseEvent>()
@@ -66,6 +68,11 @@ public class ElementGraphique
     {
         pane.getChildren().add(elm);
     }
+    public void setOpacity(float opacity)
+    {
+        this.opacity = opacity;
+        pane.setOpacity(opacity);
+    }
     public Pane getGraphics()
     {
         return pane;
@@ -93,10 +100,6 @@ public class ElementGraphique
             @Override
             public void handle(long now)
             {
-                if(time == 0)
-                {
-                    System.out.println(xGoal);
-                }
                 if(time == duration)
                 {
                     moveTo(x1,y1);
@@ -104,19 +107,38 @@ public class ElementGraphique
                 }
                 else
                 {
-                    double xx = startXX + expo(time, xStart, xGoal, duration);
-                    double yy = startYY + expo(time, yStart, yGoal, duration);
+                    double xx = startXX + EasingFunctions.expo(time, xStart, xGoal, duration);
+                    double yy = startYY + EasingFunctions.expo(time, yStart, yGoal, duration);
                     moveTo((int)xx,(int)yy);
                     time++;
                 }
             }
+        }.start();
+    }
+    public void fade(boolean in)
+    {        
+        new AnimationTimer()
+        {
+            int duration = 20;
+            float opacityStart = 0;
+            float opacityGoal = 1;
+            int time = 0;
             
-            public float expo(float t,float b , float c, float d) {
-		if (t==0) return b;
-		if (t==d) return b+c;
-		if ((t/=d/2) < 1) return c/2 * (float)Math.pow(2, 10 * (t - 1)) + b;
-		return c/2 * (-(float)Math.pow(2, -10 * --t) + 2) + b;
-	}
+            @Override
+            public void handle(long now)
+            {
+                if(time == duration)
+                {
+                    setOpacity(in?opacityGoal:1-opacityGoal);
+                    this.stop();
+                }
+                else
+                {
+                    float opac = EasingFunctions.linear(time, opacityStart, opacityGoal, duration);
+                    setOpacity(in?opac:1-opac);
+                    time++;
+                }
+            }
         }.start();
     }
     

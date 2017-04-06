@@ -31,7 +31,6 @@ public class PieceGraphique extends ElementGraphique
 
     public PieceGraphique(Piece piece,int x,int y,int size) 
     {
-        
         super(x,y,size,Color.rgb(0,0,0,0),Color.rgb(241, 196, 15,1.0),Color.rgb(241, 196, 15,0.5));
         this.piece = piece;
         oldPos = piece.pos;
@@ -57,5 +56,12 @@ public class PieceGraphique extends ElementGraphique
         oldMange = piece.isMange();
         oldPos = piece.pos;
         return pos;
+    }
+    
+    public void vanish()
+    {
+        pane.setPickOnBounds(false);
+        pane.setMouseTransparent(true);
+        fade(false);
     }
 }

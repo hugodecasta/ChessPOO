@@ -25,4 +25,9 @@ public class Point
         String s = "" + x + " " + y;
         return s;
     }
+    
+    public boolean egale(Point p)
+    {
+        return x==p.x && y==p.y;
+    }
 }
