@@ -66,6 +66,11 @@ public class ElementGraphique
     }
     protected void addElement(Node elm)
     {
+        addElement(elm,true);
+    }
+    protected void addElement(Node elm,boolean manage)
+    {
+        elm.setManaged(manage);
         pane.getChildren().add(elm);
     }
     public void setOpacity(float opacity)
@@ -127,7 +132,7 @@ public class ElementGraphique
             @Override
             public void handle(long now)
             {
-                if(time == duration)
+                if(time == duration || opacity==(in?opacityGoal:1-opacityGoal))
                 {
                     setOpacity(in?opacityGoal:1-opacityGoal);
                     this.stop();

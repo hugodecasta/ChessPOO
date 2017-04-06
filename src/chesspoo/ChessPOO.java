@@ -41,9 +41,14 @@ public class ChessPOO extends Application
     JoueurEchecs JB,JN;
     Echecs jeuEchecs;
     Thread jeu;
-    int width = 500;
-    int height = 500;
+    int width;
+    int height;
+    int xOffset;
+    int yOffset;
     int caseSize;
+    Rectangle gamerColor;
+    PromotPanel promotP;
+    JoueurEchecs lastJoueur;
     ArrayList<PieceGraphique>piecesG;
     ArrayList<Piece>pieceTracker;
     AnchorPane globalPan;
@@ -59,7 +64,11 @@ public class ChessPOO extends Application
         piecesG = new ArrayList<>();
         pieceTracker = new ArrayList<Piece>();
         
+        width = 512;
+        height = 512;
         caseSize = width/8;
+        xOffset = 0;
+        yOffset = 0;
         
         jeu = new Thread(){
             @Override
@@ -94,6 +103,13 @@ public class ChessPOO extends Application
     }        
     public void updateGrid()
     {
+        if(jeuEchecs.getJoueur() != lastJoueur)
+        {
+            if(jeuEchecs.getJoueur().isBlanc())
+                gamerColor.setFill(Color.WHITE);
+            else
+                gamerColor.setFill(Color.BLACK);
+        }
         ArrayList<Piece> pp = jeuEchecs.getEchiquier().getPieces();
         for(Piece p : pp)
         {
@@ -117,6 +133,15 @@ public class ChessPOO extends Application
                 }
             }
         }
+    }
+    public void iNeedToPromot(JoueurEchecs j)
+    {
+        promotP.setupPiece(j.isBlanc());
+        promotP.appear();
+    }
+    public void thancksForPromot()
+    {
+        promotP.vanish();
     }
     //-------------------------------------------------
     public Piece getPieceSelected()
@@ -188,13 +213,17 @@ public class ChessPOO extends Application
     //-------------------------------------------------
     public void initEchiquierFX(Pane root)
     {
+        gamerColor = new Rectangle(0,0,width+xOffset*2,height+yOffset*2);
+        gamerColor.setFill(Color.WHITE);
+        root.getChildren().add(gamerColor);
+        
         for(int i=0;i<8;++i)
         {
             for(int j=0;j<8;++j)
             {
+                int x = getXFromI(i);
                 int j2 = 7-j;
-                int x = i*caseSize;
-                int y = j*caseSize;
+                int y = getYFromJ(j2);
                 final Color backColor = (i + j2)%2==0?Color.rgb(238, 238, 210):Color.rgb(118, 150, 86);
                 
                 final CaseGraphique cg = new CaseGraphique(new Point(i,j2),x,y,caseSize,backColor);
@@ -216,13 +245,15 @@ public class ChessPOO extends Application
         {
             introducePieceGraphique(p,root);
         }
+        
+        promotP = new PromotPanel(this);
+        root.getChildren().add(promotP.getGraphics());
     }
     
     public PieceGraphique introducePieceGraphique(Piece p,Pane root)
     {
-        int j2 = 7-p.pos.y;
-        int x = p.pos.x*caseSize;
-        int y = j2*caseSize;
+        int x = getXFromI(p.pos.x);
+        int y = getYFromJ(p.pos.y);
         final PieceGraphique pg = new PieceGraphique(p,x,y,caseSize);
         pg.fade(true);
         piecesG.add(pg);
@@ -243,12 +274,12 @@ public class ChessPOO extends Application
     
     public int getXFromI(int i)
     {
-        return i*caseSize;
+        return i*caseSize+xOffset;
     }
     public int getYFromJ(int j)
     {
         int j2 = 7-j;
-        return j2*caseSize;
+        return j2*caseSize+yOffset;
     }
 
     //-------------------------------------------------

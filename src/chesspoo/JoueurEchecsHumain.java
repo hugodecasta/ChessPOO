@@ -32,6 +32,7 @@ public class JoueurEchecsHumain extends JoueurEchecs
     @Override
     public CoupEchecs getCoup(Echiquier echiquier)
     { 
+        affichage.resetSelections();
         boolean colorGood = false;
         while(!colorGood)
         {
@@ -68,7 +69,20 @@ public class JoueurEchecsHumain extends JoueurEchecs
     @Override
     public Piece getPromotion()
     {
-        return new PieceDame(new Point(0,0), isBlanc);
+        affichage.resetSelections();
+        affichage.iNeedToPromot(this);
+        while(affichage.getPieceSelected()==null)
+        {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(JoueurEchecsHumain.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        Piece p = affichage.getPieceSelected();
+        affichage.resetSelections();
+        affichage.thancksForPromot();
+        return p;
     }
     
 }

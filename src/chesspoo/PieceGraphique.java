@@ -28,24 +28,30 @@ public class PieceGraphique extends ElementGraphique
     Piece piece;
     Point oldPos;
     boolean oldMange;
+    Text backText,frontText;
 
     public PieceGraphique(Piece piece,int x,int y,int size) 
     {
         super(x,y,size,Color.rgb(0,0,0,0),Color.rgb(241, 196, 15,1.0),Color.rgb(241, 196, 15,0.5));
-        this.piece = piece;
-        oldPos = piece.pos;
         
-        Color col = piece.isBlanc()?Color.WHITE:Color.BLACK;
-        
-        Text backText = new Text(piece.toString().charAt(1)+"");
+        backText = new Text(piece.toString().charAt(1)+"");
         backText.setFont(new Font(50));
-        backText.setFill(col);
-        Text frontText = new Text(piece.toString().charAt(0)+"");
+        frontText = new Text(piece.toString().charAt(0)+"");
         frontText.setFont(new Font(50));
-        frontText.setFill(Color.BLACK);
+        
+        changePiece(piece);
         
         addElement(backText);
         addElement(frontText);
+    }
+    
+    public void changePiece(Piece piece)
+    {
+        Color col = piece.isBlanc()?Color.WHITE:Color.BLACK;
+        this.piece = piece;
+        oldPos = piece.pos;
+        backText.setFill(col);
+        frontText.setFill(Color.BLACK);
     }
     
     public Point updatePiece()

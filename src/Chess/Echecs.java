@@ -35,6 +35,11 @@ public class Echecs
         return false;
     }
     
+    public JoueurEchecs getJoueur()
+    {
+        return joueur;
+    }
+    
     public JoueurEchecs joueurSuivant()
     {
         if(joueur == null)

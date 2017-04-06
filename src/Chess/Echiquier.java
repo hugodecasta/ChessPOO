@@ -86,7 +86,9 @@ public class Echiquier
                             int dir = coup.piece.isBlanc() ? 1 : -1;
                             int yDepart = coup.piece.isBlanc() ? 1 : 6;  
                             if (coup.sortie.y == coup.piece.pos.y + dir || coup.piece.pos.y == yDepart)
-                            coup.piece.pos = coup.sortie;
+                                coup.piece.pos = coup.sortie;
+                            else
+                                return false;
                         }
                         else
                             return false;                         

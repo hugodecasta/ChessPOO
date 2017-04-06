@@ -45,6 +45,10 @@ public abstract class Piece
     {
         mange = true;
     }
+    public void setColor(boolean isBlanc)
+    {
+        blanc = isBlanc;
+    }
     //-------------------------------------------------------
     public abstract ArrayList<Point> pointsPossibles();
     @Override
