@@ -103,7 +103,6 @@ public class Echiquier
                     }
                     if(coup.sortie.y == 0 || coup.sortie.y == 7)
                     {
-                        System.out.println("PROMOTION");
                         Piece newPiece = coup.joueur.getPromotion();
                         newPiece.pos = coup.sortie;
 

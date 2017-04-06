@@ -55,17 +55,12 @@ public class Echecs
         while(!partieTerminee())
         {
             joueur = joueurSuivant();
-            System.out.println("Le joueur suivant a été selectionné");
             
             boolean pieceCoupPossible = false;
             while(!pieceCoupPossible)
             {
                 CoupEchecs coup = joueur.getCoup(echiquier);
-                System.out.println("Essai du coup Piece: "+coup.piece.toString().charAt(1));
-                System.out.println("Essai du coup Posit: "+coup.sortie.x+" - "+coup.sortie.y);
                 pieceCoupPossible = echiquier.coupsPossible(coup);
-                if(pieceCoupPossible)
-                    System.out.println("Coup validé");
             }            
         }
         return joueur;
