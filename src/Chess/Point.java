@@ -30,4 +30,20 @@ public class Point implements Cloneable
     {
         return x==p.x && y==p.y;
     }
+    
+    @Override
+    public Object clone()
+    {
+        Point p = null;
+        try
+        {
+            p = (Point) super.clone();
+        }
+        catch(CloneNotSupportedException cnse)
+        {
+            cnse.printStackTrace(System.err);
+        }
+        
+        return p;
+    }
 }

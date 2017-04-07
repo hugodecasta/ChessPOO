@@ -54,7 +54,7 @@ public class Echiquier
         }
     }
     
-    public boolean coupsPossible(CoupEchecs coup)
+    public Piece coupsPossible(CoupEchecs coup)
     {
         ArrayList<Point> coupsPossibles = coup.piece.pointsPossibles();
         for (Point pt : coupsPossibles)
@@ -66,16 +66,19 @@ public class Echiquier
                 boolean cibleNulle = (pieceCible == null); 
                 boolean memeCouleur = (!cibleNulle && (pieceCible.isBlanc() == coup.piece.isBlanc()));
                 if (memeCouleur)
-                    return false; // on ne mange pas ses potes
+                    return null; // on ne mange pas ses potes
 
                 if (coup.piece instanceof PieceCavalier || 
                     coup.piece instanceof PieceRoi)
                 {
                     if(!cibleNulle)
                     {
-                        mangerPiece(pieceCible);
+                        //mangerPiece(pieceCible);
+                        return pieceCible;
                     }
-                    coup.piece.pos = coup.sortie;
+                    //coup.piece.pos = coup.sortie;
+                    else
+                        return coup.piece;
                 } // Fin Cavalier et Roi
                 else if (coup.piece instanceof PiecePion)
                 {
@@ -86,24 +89,26 @@ public class Echiquier
                             int dir = coup.piece.isBlanc() ? 1 : -1;
                             int yDepart = coup.piece.isBlanc() ? 1 : 6;  
                             if (coup.sortie.y == coup.piece.pos.y + dir || coup.piece.pos.y == yDepart)
-                                coup.piece.pos = coup.sortie;
+                                //coup.piece.pos = coup.sortie;
+                                return coup.piece;
                             else
-                                return false;
+                                return null;
                         }
                         else
-                            return false;                         
+                            return null;                         
                     }
                     else
                     {
                         if (cibleNulle)
-                            return false;
+                            return null;
                         else
                         {
-                            coup.piece.pos = coup.sortie;
-                            mangerPiece(pieceCible);
+                            //coup.piece.pos = coup.sortie;
+                            //mangerPiece(pieceCible);
+                            return pieceCible;
                         }
                     }
-                    if(coup.sortie.y == 0 || coup.sortie.y == 7)
+                    /*if(coup.sortie.y == 0 || coup.sortie.y == 7)
                     {
                         Piece newPiece = coup.joueur.getPromotion();
                         newPiece.pos = coup.sortie;
@@ -111,7 +116,7 @@ public class Echiquier
                         coup.piece.aUnePromotion();
                         pieces.remove(coup.piece);
                         pieces.add(newPiece);
-                    }
+                    }*/
                 } // Fin Pion
                 else
                 {
@@ -132,7 +137,6 @@ public class Echiquier
                     else
                         diry = -1;
                     
-                    
                     // Point permettant de parcourir les cases jusqu'à destination
                     Point temp = new Point(coup.piece.pos.x+dirx, coup.piece.pos.y+diry);
                     int i = 1;
@@ -143,13 +147,16 @@ public class Echiquier
                         {
                             if(!cibleNulle)
                             {
-                                mangerPiece(pieceCible);
+                                //mangerPiece(pieceCible);
+                                return pieceCible;
                             }
-                            coup.piece.pos = coup.sortie;
-                            break;
+                            else
+                                return coup.piece;
+                            //coup.piece.pos = coup.sortie;
+                            //break;
                         }
                         else if (pointOccupe(temp) != null)
-                            return false;
+                            return null;
                         else
                         {
                             temp.x += dirx;
@@ -160,11 +167,39 @@ public class Echiquier
                     
                 }
                 
-                return true;
+                //return true;
             }
         }
-        return false;
+        return null;
     }
+    public boolean testeCoup(CoupEchecs coup)
+    {
+        Piece p = coupsPossible(coup);
+        if (p == null)
+            return false;
+        
+        // on teste si il y a échecs après le coup
+        Point posCible = (Point) p.pos.clone();
+        Point posPiece = (Point) coup.piece.pos.clone();
+        
+        if (p != coup.piece)
+            mangerPiece(p);
+        coup.piece.pos = coup.sortie;
+        
+        if (echecAuRoi(coup.joueur))
+        {// on ne peut pas jouer le coup donc on remet l'échiquier comme avant
+            if (p.isMange())
+            {
+                p.resurrection();
+                pieces.add(p);
+            }
+            coup.piece.pos = posPiece;
+            return false;
+        }
+        
+        return true;
+    }
+    
     private void mangerPiece(Piece p)
     {
         p.seFaitManger();
@@ -178,6 +213,32 @@ public class Echiquier
                 return p;
         }
         return null;
+    }
+    public boolean echecAuRoi(JoueurEchecs joueur)
+    {
+        CoupEchecs coupTemp = new CoupEchecs(null, null, joueur);
+        boolean couleurRoi = joueur.isBlanc();
+        for (Piece p : pieces)
+        { // on trouve la position du roi
+            if (p instanceof PieceRoi && p.isBlanc() == couleurRoi)
+            {
+                coupTemp.sortie = p.pos;
+                break;
+            }
+        }
+        
+        for (Piece p2 : pieces)
+        {
+            if (p2.isBlanc() != couleurRoi)
+            {
+                coupTemp.piece = p2;
+                if (coupsPossible(coupTemp) != null)
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
     
     @Override
