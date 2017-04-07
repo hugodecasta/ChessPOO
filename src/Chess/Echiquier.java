@@ -76,7 +76,7 @@ public class Echiquier
                         mangerPiece(pieceCible);
                     }
                     coup.piece.pos = coup.sortie;
-                }
+                } // Fin Cavalier et Roi
                 else if (coup.piece instanceof PiecePion)
                 {
                     if (coup.sortie.x == coup.piece.pos.x)
@@ -112,7 +112,54 @@ public class Echiquier
                         pieces.remove(coup.piece);
                         pieces.add(newPiece);
                     }
+                } // Fin Pion
+                else
+                {
+                    // déplacement sur plusieurs cases pour le Fou, la Tour et la Dame
+                    // on calcule d'abord la direction à évaluer
+                    int dirx, diry;
+                    if (coup.piece.pos.x < coup.sortie.x)
+                        dirx = 1;
+                    else if (coup.piece.pos.x == coup.sortie.x)
+                        dirx = 0;
+                    else
+                        dirx = -1;
+                    
+                    if (coup.piece.pos.y < coup.sortie.y)
+                        diry = 1;
+                    else if (coup.piece.pos.y == coup.sortie.y)
+                        diry = 0;
+                    else
+                        diry = -1;
+                    
+                    
+                    // Point permettant de parcourir les cases jusqu'à destination
+                    Point temp = new Point(coup.piece.pos.x+dirx, coup.piece.pos.y+diry);
+                    int i = 1;
+                    
+                    while (i < 8)
+                    {
+                        if (temp.egale(coup.sortie))
+                        {
+                            if(!cibleNulle)
+                            {
+                                mangerPiece(pieceCible);
+                            }
+                            coup.piece.pos = coup.sortie;
+                            break;
+                        }
+                        else if (pointOccupe(temp) != null)
+                            return false;
+                        else
+                        {
+                            temp.x += dirx;
+                            temp.y += diry;
+                            i++;
+                        }
+                    }
+                    
                 }
+                
                 return true;
             }
         }

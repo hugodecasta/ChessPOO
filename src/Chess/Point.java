@@ -9,7 +9,7 @@ package Chess;
  *
  * @author p1408098
  */
-public class Point
+public class Point implements Cloneable
 {
     public int x, y;
     
