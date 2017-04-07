@@ -123,8 +123,8 @@ public class Echiquier
                             res = pieceCible;
                         }
                     }
-                    int yPromo = coup.piece.isBlanc() ? 6 : 1;
-                    if(coup.sortie.y == 1 || coup.sortie.y == 6)
+                    int yPromo = coup.piece.isBlanc() ? 7 : 0;
+                    if(coup.sortie.y == yPromo)
                     {
                         Piece newPiece = coup.joueur.getPromotion();
                         newPiece.pos = coup.sortie;

@@ -16,6 +16,7 @@ public class Echecs
     Echiquier echiquier;
     JoueurEchecs joueurB, joueurN;
     JoueurEchecs joueur;
+    boolean echec=false;
     
     public Echecs(JoueurEchecs joueurB, JoueurEchecs joueurN)
     {
@@ -60,14 +61,20 @@ public class Echecs
         while(!partieTerminee())
         {
             joueur = joueurSuivant();
+            echec = echiquier.echecAuRoi(joueur);
             
             boolean pieceCoupPossible = false;
             while(!pieceCoupPossible)
             {
                 CoupEchecs coup = joueur.getCoup(echiquier);
                 pieceCoupPossible = echiquier.testeJoueCoup(coup);
-            }            
+            }
         }
         return joueur;
+    }
+    
+    public boolean estEnEchec()
+    {
+        return echec;
     }
 }
