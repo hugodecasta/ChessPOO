@@ -82,7 +82,7 @@ public class Echiquier
                 else if (coup.piece instanceof PieceRoi)
                 {
                     int xDepart = 4;
-                    if (coup.piece.pasEncoreBouge())
+                    if (coup.piece.pasEncoreBouge() && !echecAuRoi(coup.joueur))
                     {
                         int xG = 2; // grand roque
                         int xP = 6; // petit roque
@@ -96,7 +96,7 @@ public class Echiquier
                                         && pointOccupe(new Point(2, coup.piece.pos.y)) == null
                                         && pointOccupe(new Point(3, coup.piece.pos.y)) == null)
                                 {
-                                    testeJoueCoup(new CoupEchecs(tour, new Point(2, tour.pos.y), coup.joueur));
+                                    testeJoueCoup(new CoupEchecs(tour, new Point(3, tour.pos.y), coup.joueur));
                                     return coup.piece;
                                 }
                             }
@@ -115,6 +115,8 @@ public class Echiquier
                             }
                         }
                     }
+                    if (coup.sortie.x - coup.piece.pos.x == 2 || coup.sortie.x - coup.piece.pos.x == -2)
+                        return null;
                     if(!cibleNulle)
                     {
                         return pieceCible;
@@ -227,7 +229,6 @@ public class Echiquier
             return false;
         
         // on teste si il y a échecs après le coup
-        Point posCible = (Point) p.pos.clone();
         Point posPiece = (Point) coup.piece.pos.clone();
         
         if (p != coup.piece)
@@ -244,6 +245,7 @@ public class Echiquier
             return false;
         }
         
+        coup.piece.bougeEnfin();
         coups.add(coup);
         return true;
     }
