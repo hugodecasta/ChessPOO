@@ -96,7 +96,7 @@ public class Echiquier
                                         && pointOccupe(new Point(2, coup.piece.pos.y)) == null
                                         && pointOccupe(new Point(3, coup.piece.pos.y)) == null)
                                 {
-                                    tour.pos.x = 3;
+                                    testeJoueCoup(new CoupEchecs(tour, new Point(2, tour.pos.y), coup.joueur));
                                     return coup.piece;
                                 }
                             }
@@ -109,7 +109,7 @@ public class Echiquier
                                 if (pointOccupe(new Point(6, coup.piece.pos.y)) == null
                                         && pointOccupe(new Point(5, coup.piece.pos.y)) == null)
                                 {
-                                    tour.pos.x = 5;
+                                    testeJoueCoup(new CoupEchecs(tour, new Point(5, tour.pos.y), coup.joueur));
                                     return coup.piece;
                                 }
                             }
