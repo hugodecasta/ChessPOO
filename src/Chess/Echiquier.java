@@ -172,7 +172,7 @@ public class Echiquier
         }
         return null;
     }
-    public boolean testeCoup(CoupEchecs coup)
+    public boolean testeJoueCoup(CoupEchecs coup)
     {
         Piece p = coupsPossible(coup);
         if (p == null)
@@ -190,8 +190,7 @@ public class Echiquier
         {// on ne peut pas jouer le coup donc on remet l'échiquier comme avant
             if (p.isMange())
             {
-                p.resurrection();
-                pieces.add(p);
+                ressusciterPiece(p);
             }
             coup.piece.pos = posPiece;
             return false;
@@ -204,6 +203,11 @@ public class Echiquier
     {
         p.seFaitManger();
         pieces.remove(p);
+    }
+    private void ressusciterPiece(Piece p)
+    {
+        p.resurrection();
+        pieces.add(p);
     }
     public Piece pointOccupe (Point point)
     {

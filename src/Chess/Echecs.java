@@ -65,7 +65,7 @@ public class Echecs
             while(!pieceCoupPossible)
             {
                 CoupEchecs coup = joueur.getCoup(echiquier);
-                pieceCoupPossible = echiquier.testeCoup(coup);
+                pieceCoupPossible = echiquier.testeJoueCoup(coup);
             }            
         }
         return joueur;
