@@ -14,10 +14,12 @@ import java.util.ArrayList;
 public class Echiquier
 {
     ArrayList<Piece> pieces;
+    ArrayList<CoupEchecs> coups;
     
     public Echiquier()
     {
         pieces = new ArrayList<>();
+        coups = new ArrayList<>();
     }
     
     public void initPlateau()
@@ -82,15 +84,16 @@ public class Echiquier
                 } // Fin Cavalier et Roi
                 else if (coup.piece instanceof PiecePion)
                 {
+                    Piece res = null;
+                    int dir = coup.piece.isBlanc() ? 1 : -1;
                     if (coup.sortie.x == coup.piece.pos.x)
                     {
                         if (cibleNulle)
                         {
-                            int dir = coup.piece.isBlanc() ? 1 : -1;
                             int yDepart = coup.piece.isBlanc() ? 1 : 6;  
                             if (coup.sortie.y == coup.piece.pos.y + dir || coup.piece.pos.y == yDepart)
                                 //coup.piece.pos = coup.sortie;
-                                return coup.piece;
+                                res = coup.piece;
                             else
                                 return null;
                         }
@@ -99,16 +102,29 @@ public class Echiquier
                     }
                     else
                     {
+                        int yPassant = coup.piece.isBlanc() ? 4 : 3;
                         if (cibleNulle)
-                            return null;
+                        {
+                            CoupEchecs coupPrec = coups.get(coups.size()-1);
+                            if (coup.piece.pos.y == yPassant
+                                    && coupPrec.piece instanceof PiecePion
+                                    && coupPrec.sortie.x == coup.sortie.x
+                                    && coupPrec.sortie.y == coup.piece.pos.y)
+                            {
+                                res = coupPrec.piece;
+                            }
+                            else
+                                return null;
+                        }
                         else
                         {
                             //coup.piece.pos = coup.sortie;
                             //mangerPiece(pieceCible);
-                            return pieceCible;
+                            res = pieceCible;
                         }
                     }
-                    /*if(coup.sortie.y == 0 || coup.sortie.y == 7)
+                    int yPromo = coup.piece.isBlanc() ? 6 : 1;
+                    if(coup.sortie.y == 1 || coup.sortie.y == 6)
                     {
                         Piece newPiece = coup.joueur.getPromotion();
                         newPiece.pos = coup.sortie;
@@ -116,7 +132,8 @@ public class Echiquier
                         coup.piece.aUnePromotion();
                         pieces.remove(coup.piece);
                         pieces.add(newPiece);
-                    }*/
+                    }
+                    return res;
                 } // Fin Pion
                 else
                 {
@@ -196,6 +213,7 @@ public class Echiquier
             return false;
         }
         
+        coups.add(coup);
         return true;
     }
     
