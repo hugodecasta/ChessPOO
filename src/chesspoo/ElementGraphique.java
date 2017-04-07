@@ -5,6 +5,7 @@
  */
 package chesspoo;
 
+import java.util.concurrent.Callable;
 import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Node;

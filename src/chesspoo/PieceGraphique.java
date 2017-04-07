@@ -70,4 +70,64 @@ public class PieceGraphique extends ElementGraphique
         pane.setMouseTransparent(true);
         fade(false);
     }
+    
+    public void echecAuRoi()
+    {
+        System.out.println("Echec Au ROI");
+        unselectedColor = Color.RED;
+        selectedColor = Color.rgb(255, 50, 200,1.0);
+        hoverColor = Color.rgb(255, 100, 100,0.5);
+        new AnimationTimer()
+        {
+            int duration = 20;
+            float opacityStart = 0;
+            float opacityGoal = 1;
+            int time = 0;
+            
+            @Override
+            public void handle(long now)
+            {
+                if(time == duration)
+                {
+                    backRect.setFill(Color.rgb(255,0,0,1));
+                    this.stop();
+                }
+                else
+                {
+                    float opac = EasingFunctions.linear(time, opacityStart, opacityGoal, duration);
+                    backRect.setFill(Color.rgb(255,0,0,opac));
+                    time++;
+                }
+            }
+        }.start();
+    }
+    public void resetEchecAuRoi()
+    {
+        unselectedColor = Color.rgb(0,0,0,0);
+        selectedColor = Color.rgb(241, 196, 15,1.0);
+        hoverColor = Color.rgb(241, 196, 15,0.5);
+        new AnimationTimer()
+        {
+            int duration = 20;
+            float opacityStart = 0;
+            float opacityGoal = 1;
+            int time = 0;
+            
+            @Override
+            public void handle(long now)
+            {
+                if(time == duration || unselectedColor.getOpacity()==0)
+                {
+                    backRect.setFill(Color.rgb(0,0,0,0));
+                    this.stop();
+                }
+                else
+                {
+                    float opac = EasingFunctions.linear(time, opacityStart, opacityGoal, duration);
+                    backRect.setFill(Color.rgb(255,0,0,1-opac));
+                    time++;
+                }
+            }
+        }.start();
+    }
 }

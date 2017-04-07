@@ -8,6 +8,7 @@ package chesspoo;
 import Chess.Echecs;
 import Chess.JoueurEchecs;
 import Chess.Piece;
+import Chess.PieceRoi;
 import Chess.Point;
 import java.util.ArrayList;
 import javafx.animation.AnimationTimer;
@@ -46,6 +47,7 @@ public class ChessPOO extends Application
     int xOffset;
     int yOffset;
     int caseSize;
+    PieceGraphique rb,rn;
     Rectangle gamerColor;
     PromotPanel promotP;
     JoueurEchecs lastJoueur;
@@ -131,11 +133,31 @@ public class ChessPOO extends Application
                 }
                 else
                 {
-                    pg.moveToAnim(getXFromI(p.x), getYFromJ(p.y),15);
+                    pg.moveToAnim(getXFromI(p.x), getYFromJ(p.y),8);
                 }
             }
         }
+        boolean newEchec = jeuEchecs.estEnEchec();
+        if(newEchec != oldEchec)
+        {
+            if(newEchec)
+            {
+                oldEchec = true;
+                if(jeuEchecs.getJoueur().isBlanc())
+                    rb.echecAuRoi();
+                else
+                    rn.echecAuRoi();
+            }
+            else
+            {
+                oldEchec = false;
+                rb.resetEchecAuRoi();
+                rn.resetEchecAuRoi();
+            }
+            oldEchec = newEchec;
+        }
     }
+    boolean oldEchec = false;
     public void iNeedToPromot(JoueurEchecs j)
     {
         promotP.setupPiece(j.isBlanc());
@@ -226,7 +248,7 @@ public class ChessPOO extends Application
                 int x = getXFromI(i);
                 int j2 = 7-j;
                 int y = getYFromJ(j2);
-                final Color backColor = (i + j2)%2==0?Color.rgb(238, 238, 210):Color.rgb(118, 150, 86);
+                final Color backColor = (i + j)%2==0?Color.rgb(238, 238, 210):Color.rgb(118, 150, 86);
                 
                 final CaseGraphique cg = new CaseGraphique(new Point(i,j2),x,y,caseSize,backColor);
                 Pane pan = cg.getGraphics();
@@ -257,6 +279,13 @@ public class ChessPOO extends Application
         int x = getXFromI(p.pos.x);
         int y = getYFromJ(p.pos.y);
         final PieceGraphique pg = new PieceGraphique(p,x,y,caseSize);
+        if(p instanceof PieceRoi)
+        {
+            if(p.isBlanc())
+                rb = pg;
+            else
+                rn = pg;
+        }
         pg.setOpacity(0);
         pg.fade(true);
         piecesG.add(pg);
