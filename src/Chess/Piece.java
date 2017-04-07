@@ -16,17 +16,23 @@ public abstract class Piece
     public Point pos;
     private boolean blanc;
     private boolean mange;
+    private boolean bouge;
     //-------------------------------------------------------
     public Piece(Point pos, boolean blanc)
     {
         this.pos = pos;
         this.blanc = blanc;
         this.mange = false;
+        this.bouge = false;
     }
     //-------------------------------------------------------
     public boolean isBlanc()
     {
         return blanc;
+    }
+    public void setColor(boolean isBlanc)
+    {
+        blanc = isBlanc;
     }
     //-------------------------------------------------------
     public boolean isMange()
@@ -45,10 +51,16 @@ public abstract class Piece
     {
         mange = true;
     }
-    public void setColor(boolean isBlanc)
+    
+    public boolean pasEncoreBouge()
     {
-        blanc = isBlanc;
+        return !bouge;
     }
+    public void bougeEnfin()
+    {
+        bouge = true;
+    }
+    
     //-------------------------------------------------------
     public abstract ArrayList<Point> pointsPossibles();
     @Override

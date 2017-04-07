@@ -70,18 +70,58 @@ public class Echiquier
                 if (memeCouleur)
                     return null; // on ne mange pas ses potes
 
-                if (coup.piece instanceof PieceCavalier || 
-                    coup.piece instanceof PieceRoi)
+                if (coup.piece instanceof PieceCavalier)
                 {
                     if(!cibleNulle)
                     {
-                        //mangerPiece(pieceCible);
                         return pieceCible;
                     }
-                    //coup.piece.pos = coup.sortie;
                     else
                         return coup.piece;
-                } // Fin Cavalier et Roi
+                } // Fin Cavalier
+                else if (coup.piece instanceof PieceRoi)
+                {
+                    int xDepart = 4;
+                    if (coup.piece.pasEncoreBouge())
+                    {
+                        int xG = 2; // grand roque
+                        int xP = 6; // petit roque
+                        Piece tour = null;
+                        if (coup.sortie.x == xG)
+                        {
+                            tour = pointOccupe(new Point(0, coup.piece.pos.y));
+                            if (tour != null && tour.pasEncoreBouge())
+                            {
+                                if (pointOccupe(new Point(1, coup.piece.pos.y)) == null
+                                        && pointOccupe(new Point(2, coup.piece.pos.y)) == null
+                                        && pointOccupe(new Point(3, coup.piece.pos.y)) == null)
+                                {
+                                    tour.pos.x = 3;
+                                    return coup.piece;
+                                }
+                            }
+                        }
+                        else if (coup.sortie.x == xP)
+                        {
+                            tour = pointOccupe(new Point(7, coup.piece.pos.y));
+                            if (tour != null && tour.pasEncoreBouge())
+                            {
+                                if (pointOccupe(new Point(6, coup.piece.pos.y)) == null
+                                        && pointOccupe(new Point(5, coup.piece.pos.y)) == null)
+                                {
+                                    tour.pos.x = 5;
+                                    return coup.piece;
+                                }
+                            }
+                        }
+                    }
+                    if(!cibleNulle)
+                    {
+                        return pieceCible;
+                    }
+                    else
+                        return coup.piece;
+                } // Fin Roi
                 else if (coup.piece instanceof PiecePion)
                 {
                     Piece res = null;
@@ -92,7 +132,6 @@ public class Echiquier
                         {
                             int yDepart = coup.piece.isBlanc() ? 1 : 6;  
                             if (coup.sortie.y == coup.piece.pos.y + dir || coup.piece.pos.y == yDepart)
-                                //coup.piece.pos = coup.sortie;
                                 res = coup.piece;
                             else
                                 return null;
@@ -118,8 +157,6 @@ public class Echiquier
                         }
                         else
                         {
-                            //coup.piece.pos = coup.sortie;
-                            //mangerPiece(pieceCible);
                             res = pieceCible;
                         }
                     }
@@ -164,13 +201,10 @@ public class Echiquier
                         {
                             if(!cibleNulle)
                             {
-                                //mangerPiece(pieceCible);
                                 return pieceCible;
                             }
                             else
                                 return coup.piece;
-                            //coup.piece.pos = coup.sortie;
-                            //break;
                         }
                         else if (pointOccupe(temp) != null)
                             return null;
@@ -181,10 +215,7 @@ public class Echiquier
                             i++;
                         }
                     }
-                    
-                }
-                
-                //return true;
+                } // Fin Fou, Tour, Dame
             }
         }
         return null;

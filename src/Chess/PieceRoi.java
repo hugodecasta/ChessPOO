@@ -34,11 +34,13 @@ public class PieceRoi extends Piece
                     ret.add(new Point(x+i,y+j));
                 }
             }
+            if (i != 0)
+                ret.add(new Point(x+2*i, y)); // pour le roque
         }
         
         return ret;
     }
-
+    
     @Override
     public String toString()
     {
