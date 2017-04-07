@@ -162,16 +162,7 @@ public class Echiquier
                             res = pieceCible;
                         }
                     }
-                    int yPromo = coup.piece.isBlanc() ? 7 : 0;
-                    if(coup.sortie.y == yPromo)
-                    {
-                        Piece newPiece = coup.joueur.getPromotion();
-                        newPiece.pos = coup.sortie;
-
-                        coup.piece.aUnePromotion();
-                        pieces.remove(coup.piece);
-                        pieces.add(newPiece);
-                    }
+                    
                     return res;
                 } // Fin Pion
                 else
@@ -243,6 +234,20 @@ public class Echiquier
             }
             coup.piece.pos = posPiece;
             return false;
+        }
+        
+        if (coup.piece instanceof PiecePion)
+        { // demande pour la promotion
+            int yPromo = coup.piece.isBlanc() ? 7 : 0;
+            if(coup.sortie.y == yPromo)
+            {
+                Piece newPiece = coup.joueur.getPromotion();
+                newPiece.pos = coup.sortie;
+
+                coup.piece.aUnePromotion();
+                pieces.remove(coup.piece);
+                pieces.add(newPiece);
+            }
         }
         
         coup.piece.bougeEnfin();
