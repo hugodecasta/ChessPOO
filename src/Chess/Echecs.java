@@ -62,6 +62,17 @@ public class Echecs
         {
             joueur = joueurSuivant();
             echec = echiquier.echecAuRoi(joueur);
+            boolean matPat = echiquier.matOuPat(joueur);
+            
+            if (matPat)
+            {
+                if (estEnEchec())
+                    System.out.println("MAT");
+                else
+                    System.out.println("PAT");
+                
+                return joueur;
+            }
             
             boolean pieceCoupPossible = false;
             while(!pieceCoupPossible)

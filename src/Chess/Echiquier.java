@@ -58,6 +58,12 @@ public class Echiquier
     
     public Piece coupsPossible(CoupEchecs coup)
     {
+        if (coup.sortie.x < 0
+                || coup.sortie.x > 7
+                || coup.sortie.y < 0
+                || coup.sortie.y > 7)
+            return null;
+        
         ArrayList<Point> coupsPossibles = coup.piece.pointsPossibles();
         for (Point pt : coupsPossibles)
         {
@@ -96,8 +102,15 @@ public class Echiquier
                                         && pointOccupe(new Point(2, coup.piece.pos.y)) == null
                                         && pointOccupe(new Point(3, coup.piece.pos.y)) == null)
                                 {
-                                    testeJoueCoup(new CoupEchecs(tour, new Point(3, tour.pos.y), coup.joueur));
-                                    return coup.piece;
+                                    coup.piece.pos.x--; // on décale le roi pour tester l'échecs intermédiaire
+
+                                    boolean echecsInterm = echecAuRoi(coup.joueur);
+                                    coup.piece.pos.x++; // on remet le roi en place 
+                             
+                                    if(!echecsInterm){
+                                        testeJoueCoup(new CoupEchecs(tour, new Point(3, tour.pos.y), coup.joueur));
+                                        return coup.piece;
+                                    }
                                 }
                             }
                         }
@@ -109,13 +122,19 @@ public class Echiquier
                                 if (pointOccupe(new Point(6, coup.piece.pos.y)) == null
                                         && pointOccupe(new Point(5, coup.piece.pos.y)) == null)
                                 {
-                                    testeJoueCoup(new CoupEchecs(tour, new Point(5, tour.pos.y), coup.joueur));
-                                    return coup.piece;
+                                    coup.piece.pos.x++; // on décale le roi pour tester l'échecs intermédiaire
+                                    boolean echecInterm = echecAuRoi(coup.joueur);
+                                    coup.piece.pos.x--; // on remet le roi en place                                   
+                                    
+                                    if (!echecInterm){
+                                        testeJoueCoup(new CoupEchecs(tour, new Point(5, tour.pos.y), coup.joueur));
+                                        return coup.piece;
+                                    }
                                 }
                             }
                         }
                     }
-                    if (coup.sortie.x - coup.piece.pos.x == 2 || coup.sortie.x - coup.piece.pos.x == -2)
+                    if (coup.sortie.x - coup.piece.pos.x == 2 || coup.sortie.x - coup.piece.pos.x == -2) // on n'a pas pu faire le roque donc on ne bouge pas
                         return null;
                     if(!cibleNulle)
                     {
@@ -299,6 +318,49 @@ public class Echiquier
             }
         }
         return false;
+    }
+    public boolean matOuPat(JoueurEchecs joueur)
+    {
+        ArrayList<Point> points = null;
+        for (Piece p : pieces)
+        {
+            if (p.isBlanc() == joueur.isBlanc)
+            {
+                CoupEchecs coupTemp = new CoupEchecs(p, null, joueur);
+                Point oldPosPiece = (Point) p.pos.clone();
+                points = p.pointsPossibles();
+                for (Point pt : points)
+                {
+                    coupTemp.sortie = pt;
+                    Piece cible = coupsPossible(coupTemp);
+                    if (cible != null)
+                    {
+                        p.pos = coupTemp.sortie;
+                        if (cible != p)
+                            mangerPiece(cible);
+
+                        boolean isEchec = echecAuRoi(joueur);
+
+                        // Debut remise en place
+                        p.pos = oldPosPiece;
+                        if (cible.isMange())
+                        {
+                            ressusciterPiece(cible);
+                        }
+                        // fin remise en place
+
+                        if (!isEchec)
+                        {
+                            System.out.println(p);
+                            System.out.println(p.pos);
+                            System.out.println(coupTemp.sortie);
+                            return false; // on a trouvé un coup sans échec
+                        }
+                    }
+                }
+            }
+        }
+        return true; // mat ou pat
     }
     
     @Override
