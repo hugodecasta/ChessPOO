@@ -35,9 +35,9 @@ public class PieceGraphique extends ElementGraphique
         super(x,y,size,Color.rgb(0,0,0,0),Color.rgb(241, 196, 15,1.0),Color.rgb(241, 196, 15,0.5));
         
         backText = new Text(piece.toString().charAt(1)+"");
-        backText.setFont(new Font(50));
+        backText.setFont(new Font(size-10));
         frontText = new Text(piece.toString().charAt(0)+"");
-        frontText.setFont(new Font(50));
+        frontText.setFont(new Font(size-10));
         
         changePiece(piece);
         

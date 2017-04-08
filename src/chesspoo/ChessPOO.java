@@ -59,6 +59,8 @@ public class ChessPOO extends Application
     @Override
     public void start(Stage primaryStage)
     {
+        primaryStage.getIcons().add(new Image("pion.png"));
+        primaryStage.setTitle("My Chess");
         JB = new JoueurEchecsHumain(this,true);
         JN = new JoueurEchecsHumain(this,false);
         jeuEchecs = new Echecs(JB,JN);
@@ -67,9 +69,9 @@ public class ChessPOO extends Application
         piecesG = new ArrayList<>();
         pieceTracker = new ArrayList<Piece>();
         
-        width = 512;
-        height = 512;
-        caseSize = width/8;
+        caseSize = 100;
+        width = caseSize*8;
+        height = caseSize*8;
         
         jeu = new Thread(){
             @Override
