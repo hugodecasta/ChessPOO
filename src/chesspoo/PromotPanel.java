@@ -25,11 +25,15 @@ public class PromotPanel extends ElementGraphique
     PieceGraphique dame,cavalier,tour,fou;
     public PromotPanel(ChessPOO affichage)
     {
-        super(0, 0, affichage.width, Color.rgb(0,0,0,0.7), Color.rgb(0,0,0,0.7), Color.rgb(0,0,0,0.7));
-        dame = new PieceGraphique(new PieceDame(new Point(0,0), true), affichage.getXFromI(3)+affichage.caseSize/2, affichage.getXFromI(3)+affichage.caseSize/2, affichage.caseSize);
-        cavalier = new PieceGraphique(new PieceCavalier(new Point(0,0), true), affichage.getXFromI(3)+affichage.caseSize/2, affichage.getXFromI(4)+affichage.caseSize/2, affichage.caseSize);
-        tour = new PieceGraphique(new PieceTour(new Point(0,0), true), affichage.getXFromI(4)+affichage.caseSize/2, affichage.getYFromJ(3)+affichage.caseSize/2, affichage.caseSize);
-        fou = new PieceGraphique(new PieceFou(new Point(0,0), true), affichage.getXFromI(4)+affichage.caseSize/2, affichage.getYFromJ(4)+affichage.caseSize/2, affichage.caseSize);
+        super(0, 0, affichage.tWidth, affichage.tHeight, Color.rgb(0,0,0,0.7), Color.rgb(0,0,0,0.7), Color.rgb(0,0,0,0.7));
+        dame = new PieceGraphique(new PieceDame(new Point(0,0), true), 
+                affichage.getXFromI(3)+affichage.caseSize/2, affichage.getYFromJ(3)+affichage.caseSize/2, affichage.caseSize);
+        cavalier = new PieceGraphique(new PieceCavalier(new Point(0,0), true), 
+                affichage.getXFromI(3)+affichage.caseSize/2, affichage.getYFromJ(4)+affichage.caseSize/2, affichage.caseSize);
+        tour = new PieceGraphique(new PieceTour(new Point(0,0), true), 
+                affichage.getXFromI(4)+affichage.caseSize/2, affichage.getYFromJ(3)+affichage.caseSize/2, affichage.caseSize);
+        fou = new PieceGraphique(new PieceFou(new Point(0,0), true), 
+                affichage.getXFromI(4)+affichage.caseSize/2, affichage.getYFromJ(4)+affichage.caseSize/2, affichage.caseSize);
         int more = affichage.caseSize/2;
         
         

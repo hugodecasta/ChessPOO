@@ -23,25 +23,40 @@ public class ElementGraphique
 {
     protected StackPane pane;
     protected boolean isSelected;
-    protected int x,y,size;
+    protected int x,y,sizew,sizeh;
     protected float opacity;
     Color selectedColor,hoverColor,unselectedColor;
     final Rectangle backRect;
     
     public ElementGraphique(int x, int y, int size, Color back, Color sel, Color hover)
     {
+        this(x, y, size, size, back, sel, hover);
+    }
+    
+    public ElementGraphique(int x, int y, int sizew, int sizeh, Color back, Color sel, Color hover)
+    {
         pane = new StackPane();
         moveTo(x, y);
-        pane.setMinSize(size,size);
-        pane.setMaxSize(size,size);
+        pane.setMinSize(sizew,sizeh);
+        pane.setMaxSize(sizew,sizeh);
         selectedColor = sel;
         hoverColor = hover;
         unselectedColor = back;
         
-        backRect = new Rectangle(0,0,size,size);
+        backRect = new Rectangle(0,0,sizew,sizeh);
         backRect.setFill(unselectedColor);
         setOpacity(1);
         
+        pane.setOnMousePressed(
+        new EventHandler<MouseEvent>()
+        {
+            public void handle(MouseEvent e)
+            {
+                if(!isSelected)
+                    backRect.setFill(selectedColor);
+            }
+        }
+        );
         pane.setOnMouseEntered(
         new EventHandler<MouseEvent>()
         {

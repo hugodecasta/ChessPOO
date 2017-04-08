@@ -17,6 +17,8 @@ import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.ColumnConstraints;
@@ -42,13 +44,12 @@ public class ChessPOO extends Application
     JoueurEchecs JB,JN;
     Echecs jeuEchecs;
     Thread jeu;
-    int width;
-    int height;
+    int width,tWidth;
+    int height,tHeight;
     int xOffset;
     int yOffset;
     int caseSize;
     PieceGraphique rb,rn;
-    Rectangle gamerColor;
     PromotPanel promotP;
     JoueurEchecs lastJoueur;
     ArrayList<PieceGraphique>piecesG;
@@ -69,8 +70,6 @@ public class ChessPOO extends Application
         width = 512;
         height = 512;
         caseSize = width/8;
-        xOffset = 0;
-        yOffset = 0;
         
         jeu = new Thread(){
             @Override
@@ -109,10 +108,10 @@ public class ChessPOO extends Application
     {
         if(jeuEchecs.getJoueur() != lastJoueur)
         {
-            if(jeuEchecs.getJoueur().isBlanc())
+            /*if(jeuEchecs.getJoueur().isBlanc())
                 gamerColor.setFill(Color.WHITE);
             else
-                gamerColor.setFill(Color.BLACK);
+                gamerColor.setFill(Color.BLACK);*/
         }
         ArrayList<Piece> pp = jeuEchecs.getEchiquier().getPieces();
         for(Piece p : pp)
@@ -237,9 +236,24 @@ public class ChessPOO extends Application
     //-------------------------------------------------
     public void initEchiquierFX(Pane root)
     {
-        gamerColor = new Rectangle(0,0,width+xOffset*2,height+yOffset*2);
+        xOffset = 5;
+        yOffset = caseSize;
+        /*gamerColor = new Rectangle(0,0,width+xOffset*2,height+yOffset*2);
         gamerColor.setFill(Color.WHITE);
-        root.getChildren().add(gamerColor);
+        root.getChildren().add(gamerColor);*/
+        Rectangle back = new Rectangle(0,0,width+2*xOffset,height+2*yOffset);
+        back.setFill(Color.rgb(52, 73, 94));
+        root.getChildren().add(back);
+        tWidth = (int)back.getWidth();
+        tHeight = (int)back.getHeight();
+        
+        Image img = new Image("chess.jpg");
+        ImageView chessBoard = new ImageView(img);
+        chessBoard.setX(xOffset);
+        chessBoard.setY(yOffset);
+        chessBoard.setFitHeight(caseSize*8);
+        chessBoard.setFitWidth(caseSize*8);
+        root.getChildren().add(chessBoard);
         
         for(int i=0;i<8;++i)
         {
@@ -248,7 +262,9 @@ public class ChessPOO extends Application
                 int x = getXFromI(i);
                 int j2 = 7-j;
                 int y = getYFromJ(j2);
-                final Color backColor = (i + j)%2==0?Color.rgb(238, 238, 210):Color.rgb(118, 150, 86);
+                //final Color backColor = (i + j)%2==0?Color.rgb(238, 238, 210):Color.rgb(118, 150, 86);
+                //final Color backColor = (i + j)%2==0?Color.rgb(255,228,196):Color.rgb(139,69,19);
+                final Color backColor = (i + j)%2==0?Color.rgb(0,0,0,0):Color.rgb(139,69,19,0.5);
                 
                 final CaseGraphique cg = new CaseGraphique(new Point(i,j2),x,y,caseSize,backColor);
                 Pane pan = cg.getGraphics();
