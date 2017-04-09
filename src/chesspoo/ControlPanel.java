@@ -5,6 +5,7 @@
  */
 package chesspoo;
 
+import Chess.Echecs;
 import Chess.JoueurEchecs;
 import com.sun.javafx.scene.control.skin.LabeledText;
 import javafx.animation.AnimationTimer;
@@ -23,12 +24,15 @@ public class ControlPanel extends ElementGraphique
 {
     JoueurEchecs joueurBlanc, joueurNoir;
     Text compteurB,compteurN;
+    Echecs jeu;
     
-    public ControlPanel(int caseSize,JoueurEchecs jb, JoueurEchecs jn) {
+    public ControlPanel(int caseSize,Echecs jeu) {
         super(0, 0, caseSize*8,caseSize*10, Color.rgb(100,100,100), Color.rgb(100,100,100), Color.rgb(100,100,100));
         
-        this.joueurBlanc = jb;
-        this.joueurNoir = jn;
+        this.joueurBlanc = jeu.getJoueurBlanc();
+        this.joueurNoir = jeu.getJoueurNoir();
+        
+        this.jeu = jeu;
         
         compteurB = new Text("COUCOU");
         compteurB.setFont(new Font(30));
@@ -45,8 +49,8 @@ public class ControlPanel extends ElementGraphique
         addFreeElement(compteurB);
         addFreeElement(compteurN);
         
-        GButton but = new GButton(10,5,50);
-        GButton but2 = new GButton(10,sizeh-5,50);
+        GButton but = new GButton(10,caseSize-50-5,100,50,"Abandon");
+        GButton but2 = new GButton(10,sizeh-caseSize+5,100,50,"Abandon");
         
         addFreeElement(but.getGraphics());
         addFreeElement(but2.getGraphics());
@@ -84,6 +88,17 @@ public class ControlPanel extends ElementGraphique
     {
         compteurB.setText(getTimeString(joueurBlanc.getCompteur().getTime()));
         compteurN.setText(getTimeString(joueurNoir.getCompteur().getTime()));
+        
+        if(jeu.getJoueurActuel() == joueurNoir)
+        {
+            compteurB.setFill(Color.gray(0.5));
+            compteurN.setFill(Color.gray(1));
+        }
+        else
+        {
+            compteurN.setFill(Color.gray(0.5));
+            compteurB.setFill(Color.gray(1));
+        }
     }
     
     public String getTimeString(long secondes)

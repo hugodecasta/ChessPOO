@@ -23,9 +23,9 @@ public class JoueurEchecsHumain extends JoueurEchecs
 {
     EchiquierGraphique echiquierG;
     
-    public JoueurEchecsHumain(boolean isBlanc,int secondes)
+    public JoueurEchecsHumain(boolean isBlanc)
     {
-        super(isBlanc,secondes);
+        super(isBlanc);
     }
     
     public void setEchiquierGraphique(EchiquierGraphique echiquierG)
@@ -58,6 +58,8 @@ public class JoueurEchecsHumain extends JoueurEchecs
                 Logger.getLogger(JoueurEchecsHumain.class.getName()).log(Level.SEVERE, null, ex);
             }
             //-----------------------
+            if(compteur.getTime()<=0)
+                abandonner();
         }
         
         Point sCase = null;
@@ -73,6 +75,8 @@ public class JoueurEchecsHumain extends JoueurEchecs
                 Logger.getLogger(JoueurEchecsHumain.class.getName()).log(Level.SEVERE, null, ex);
             }
             //-----------------------
+            if(compteur.getTime()<=0)
+                abandonner();
         }
         if(abandon)
             return null;

@@ -15,10 +15,10 @@ public abstract class JoueurEchecs
     protected boolean abandon;
     protected CompteurEchecs compteur;
             
-    public JoueurEchecs(boolean isBlanc,int secondes)
+    public JoueurEchecs(boolean isBlanc)
     {
         this.isBlanc = isBlanc;
-        compteur = new CompteurEchecs(secondes*1000);
+        compteur = new CompteurEchecs(1000);
     }
     
     public abstract CoupEchecs getCoup(Echiquier echiquier);
@@ -37,5 +37,6 @@ public abstract class JoueurEchecs
     public void abandonner()
     {
         abandon = true;
+        compteur.pause();
     }
 }

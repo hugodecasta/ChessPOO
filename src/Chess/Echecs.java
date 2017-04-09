@@ -31,9 +31,24 @@ public class Echecs
         return echiquier;
     }
     
+    public JoueurEchecs getJoueurBlanc()
+    {
+        return joueurB;
+    }
+    
+    public JoueurEchecs getJoueurNoir()
+    {
+        return joueurN;
+    }
+    
+    public JoueurEchecs getJoueurActuel()
+    {
+        return joueur;
+    }
+    
     public JoueurEchecs partie(ModeEchecs mode)
     {
-        mode.initMode(echiquier,joueurB,joueurN);
+        mode.initMode(this);
         joueurG = null;
         
         while(true)

@@ -17,6 +17,8 @@ public abstract class ModeEchecs
     {
     }
     
-    public abstract void initMode(Echiquier echiquier,JoueurEchecs jn,JoueurEchecs nb);
+    public abstract void initMode(Echecs jeu);
+    @Override
+    public abstract String toString();
     public abstract JoueurEchecs joueurSuivant();
 }

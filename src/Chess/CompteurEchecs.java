@@ -38,6 +38,11 @@ public class CompteurEchecs
         }
     }
     
+    public void setTime(long startMilli)
+    {
+        countingFromTime = 0;
+    }
+    
     public long getTime()
     {
         if(!start) 

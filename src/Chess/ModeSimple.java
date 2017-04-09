@@ -18,11 +18,13 @@ public class ModeSimple extends ModeEchecs
     }
 
     @Override
-    public void initMode(Echiquier echiquier, JoueurEchecs jb, JoueurEchecs jn)
+    public void initMode(Echecs jeu)
     {
-        this.jb = jb;
-        this.jn = jn;
-        echiquier.initPlateau();
+        this.jb = jeu.getJoueurBlanc();
+        this.jn = jeu.getJoueurNoir();
+        jb.compteur = new CompteurEchecs(59*1000);
+        jn.compteur = new CompteurEchecs(59*1000);
+        jeu.getEchiquier().initPlateau();
     }
 
     @Override
@@ -33,6 +35,12 @@ public class ModeSimple extends ModeEchecs
         else
             actJ = jn;
         return actJ;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "1 minute";
     }
     
 }

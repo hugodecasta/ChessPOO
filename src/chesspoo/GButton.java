@@ -16,15 +16,15 @@ import javafx.scene.text.Text;
 public class GButton extends ElementGraphique
 {
     
-    public GButton(int x, int y, int size)
+    public GButton(int x, int y, int sizew, int sizeh, String text)
     {
-        super(x, y, size, Color.rgb(50, 50, 50), Color.rgb(255, 255, 255), Color.rgb(200, 200, 200));
+        super(x, y, sizew, sizeh, Color.rgb(50, 50, 50), Color.rgb(255, 255, 255), Color.rgb(150, 150, 150));
         
-        Text t = new Text("BUTTON");
+        Text t = new Text(text);
         t.setFill(Color.rgb(255,255,255));
         t.setFont(new Font(20));
         
-        addFreeElement(t);
+        addElement(t);
     }
     
 }

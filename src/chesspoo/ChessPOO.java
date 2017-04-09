@@ -81,21 +81,24 @@ public class ChessPOO extends Application
     private void startAll(Stage primaryStage)
     {
         primaryStage.show();
-        jeu = new Thread(){
-            @Override
-            public void run()
+        
+        matPanel.getGraphics().setOnMouseClicked(
+        new EventHandler<MouseEvent>()
+        {
+            public void handle(MouseEvent e)
             {
-                gagnant = jeuEchecs.partie(new ModeSimple());
-                matPanel.winning(gagnant);
+                matPanel.vanish();
+                startAsker();
             }
-        };
-        jeu.start();
+        }
+        );
+        startAsker();
     }
     //-----------------------------
     private void initEchecsLogic()
     {
-        joueurBlanc = new JoueurEchecsHumain(true,30);
-        joueurNoir = new JoueurEchecsHumain(false,30);
+        joueurBlanc = new JoueurEchecsHumain(true);
+        joueurNoir = new JoueurEchecsHumain(false);
         jeuEchecs = new Echecs(joueurBlanc,joueurNoir);
     }
     //-----------------------------
@@ -113,7 +116,7 @@ public class ChessPOO extends Application
     {
         caseSize = 60;
         // Background
-        controlPanel = new ControlPanel(caseSize, joueurBlanc, joueurNoir);
+        controlPanel = new ControlPanel(caseSize, jeuEchecs);
         globalPan.getChildren().add(controlPanel.getGraphics());
         // Echiquier
         echecsGraphiques = new EchiquierGraphique(0, caseSize, caseSize, jeuEchecs.getEchiquier());
@@ -131,7 +134,18 @@ public class ChessPOO extends Application
     {
         jeu.stop();
     }
-    
+    public void startAsker()
+    {
+        jeu = new Thread(){
+            @Override
+            public void run()
+            {
+                gagnant = jeuEchecs.partie(new ModeSimple());
+                matPanel.winning(gagnant);
+            }
+        };
+        jeu.start();
+    }    
 
     //-------------------------------------------------
     /**
