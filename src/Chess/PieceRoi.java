@@ -44,7 +44,7 @@ public class PieceRoi extends Piece
     @Override
     public String toString()
     {
-        return "♔♚";
+        return "♔♚" + (isBlanc()?" - B":" - N");
     }   
     
 }

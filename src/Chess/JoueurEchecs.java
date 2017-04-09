@@ -12,10 +12,13 @@ package Chess;
 public abstract class JoueurEchecs
 {
     protected boolean isBlanc;
+    protected boolean abandon;
+    protected CompteurEchecs compteur;
             
-    public JoueurEchecs(boolean isBlanc)
+    public JoueurEchecs(boolean isBlanc,int secondes)
     {
         this.isBlanc = isBlanc;
+        compteur = new CompteurEchecs(secondes*1000);
     }
     
     public abstract CoupEchecs getCoup(Echiquier echiquier);
@@ -24,5 +27,15 @@ public abstract class JoueurEchecs
     public boolean isBlanc()
     {
         return isBlanc;
+    }
+    
+    public CompteurEchecs getCompteur()
+    {
+        return compteur;
+    }
+    
+    public void abandonner()
+    {
+        abandon = true;
     }
 }

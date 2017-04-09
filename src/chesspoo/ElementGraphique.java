@@ -10,6 +10,7 @@ import javafx.animation.AnimationTimer;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -22,6 +23,7 @@ import javafx.scene.shape.Rectangle;
 public class ElementGraphique
 {
     protected StackPane pane;
+    protected AnchorPane anPane;
     protected boolean isSelected;
     protected int x,y,sizew,sizeh;
     protected float opacity;
@@ -35,7 +37,11 @@ public class ElementGraphique
     
     public ElementGraphique(int x, int y, int sizew, int sizeh, Color back, Color sel, Color hover)
     {
+        this.sizew = sizew;
+        this.sizeh = sizeh;
+        
         pane = new StackPane();
+        anPane = new AnchorPane();
         moveTo(x, y);
         pane.setMinSize(sizew,sizeh);
         pane.setMaxSize(sizew,sizeh);
@@ -79,15 +85,15 @@ public class ElementGraphique
         );
         
         addElement(backRect);
+        addElement(anPane);
     }
     protected void addElement(Node elm)
     {
-        addElement(elm,true);
-    }
-    protected void addElement(Node elm,boolean manage)
-    {
-        elm.setManaged(manage);
         pane.getChildren().add(elm);
+    }
+    protected void addFreeElement(Node elm)
+    {
+        anPane.getChildren().add(elm);
     }
     public void setOpacity(float opacity)
     {
@@ -174,5 +180,15 @@ public class ElementGraphique
         backRect.setFill(unselectedColor);
     }
     
+    public void appear()
+    {
+        fade(true);
+        pane.setMouseTransparent(false);
+    }
+    public void vanish()
+    {
+        fade(false);
+        pane.setMouseTransparent(true);
+    }
     
 }

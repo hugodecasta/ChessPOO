@@ -7,6 +7,7 @@ package chesspoo;
 
 import Chess.Echecs;
 import Chess.JoueurEchecs;
+import Chess.ModeSimple;
 import Chess.Piece;
 import Chess.PieceRoi;
 import Chess.Point;
@@ -38,10 +39,7 @@ import javafx.stage.Stage;
 public class ChessPOO extends Application
 {
     //-------------------------------------------------
-    PieceGraphique pieceSelected;
-    Point selectedPoint;
-    CaseGraphique caseSelected;
-    JoueurEchecs JB,JN;
+    
     Echecs jeuEchecs;
     Thread jeu;
     int width,tWidth;
@@ -49,288 +47,91 @@ public class ChessPOO extends Application
     int xOffset;
     int yOffset;
     int caseSize;
-    PieceGraphique rb,rn;
-    PromotPanel promotP;
-    JoueurEchecs lastJoueur;
-    ArrayList<PieceGraphique>piecesG;
-    ArrayList<Piece>pieceTracker;
-    AnchorPane globalPan,echiquierPane;
-    //-------------------------------------------------
+    
+    JoueurEchecs joueurBlanc,joueurNoir;
+    
+    AnchorPane globalPan;
+    
+    AnchorPane modePane;
+    ControlPanel controlPanel;
+    MatPanel matPanel;
+    
+    JoueurEchecs gagnant;    
+    EchiquierGraphique echecsGraphiques;
+    //----------------------------------------------------------------------
+    //----------------------------------------------------------------------
     @Override
     public void start(Stage primaryStage)
+    {        
+        initWindow(primaryStage);
+        
+        initEchecsLogic();
+        initEchecsGraphics();
+        
+        startAll(primaryStage);
+    }
+    //---------------------------------------------------------------------- UPDATER
+    //----------------------------------------------------------------------
+    public void update()
     {
-        primaryStage.getIcons().add(new Image("pion.png"));
-        primaryStage.setTitle("My Chess");
-        JB = new JoueurEchecsHumain(this,true);
-        JN = new JoueurEchecsHumain(this,false);
-        jeuEchecs = new Echecs(JB,JN);
-        jeuEchecs.initEchecs();
         
-        piecesG = new ArrayList<>();
-        pieceTracker = new ArrayList<Piece>();
-        
-        caseSize = 100;
-        width = caseSize*8;
-        height = caseSize*8;
-        
+    }
+    //---------------------------------------------------------------------- INITIALISATIONS
+    //----------------------------------------------------------------------
+    private void startAll(Stage primaryStage)
+    {
+        primaryStage.show();
         jeu = new Thread(){
             @Override
             public void run()
             {
-                jeuEchecs.partie();
+                gagnant = jeuEchecs.partie(new ModeSimple());
+                matPanel.winning(gagnant);
             }
         };
         jeu.start();
-        
+    }
+    //-----------------------------
+    private void initEchecsLogic()
+    {
+        joueurBlanc = new JoueurEchecsHumain(true,30);
+        joueurNoir = new JoueurEchecsHumain(false,30);
+        jeuEchecs = new Echecs(joueurBlanc,joueurNoir);
+    }
+    //-----------------------------
+    private void initWindow(Stage primaryStage)
+    {
+        primaryStage.getIcons().add(new Image("pion.png"));
+        primaryStage.setTitle("My Chess");
         globalPan = new AnchorPane();
-        echiquierPane = new AnchorPane();
-        initEchiquierFX(echiquierPane);
-        globalPan.getChildren().add(echiquierPane);
         Scene scene = new Scene(globalPan);
         primaryStage.setScene(scene);
         scene.setRoot(globalPan);
-        primaryStage.show();
-        
-        new AnimationTimer()
-        {
-            @Override
-            public void handle(long now)
-            {
-                updateGrid();
-            }
-        }.start();
     }
-    //-------------------------------------------------
+    //-----------------------------
+    private void initEchecsGraphics()
+    {
+        caseSize = 60;
+        // Background
+        controlPanel = new ControlPanel(caseSize, joueurBlanc, joueurNoir);
+        globalPan.getChildren().add(controlPanel.getGraphics());
+        // Echiquier
+        echecsGraphiques = new EchiquierGraphique(0, caseSize, caseSize, jeuEchecs.getEchiquier());
+        globalPan.getChildren().add(echecsGraphiques.getGraphics());
+        ((JoueurEchecsHumain)joueurBlanc).setEchiquierGraphique(echecsGraphiques);
+        ((JoueurEchecsHumain)joueurNoir).setEchiquierGraphique(echecsGraphiques);
+        // Mat
+        matPanel = new MatPanel(caseSize);
+        globalPan.getChildren().add(matPanel.getGraphics());
+    }
+    //----------------------------------------------------------------------
+    //----------------------------------------------------------------------
     @Override
     public void stop()
     {
         jeu.stop();
-    }        
-    public void updateGrid()
-    {
-        if(jeuEchecs.getJoueur() != lastJoueur)
-        {
-            /*if(jeuEchecs.getJoueur().isBlanc())
-                gamerColor.setFill(Color.WHITE);
-            else
-                gamerColor.setFill(Color.BLACK);*/
-        }
-        ArrayList<Piece> pp = jeuEchecs.getEchiquier().getPieces();
-        for(Piece p : pp)
-        {
-            if(!pieceTracker.contains(p))
-            {
-                PieceGraphique pg = introducePieceGraphique(p, globalPan);
-            }
-        }
-        for(PieceGraphique pg : piecesG)
-        {
-            Point p = pg.updatePiece();
-            if(p!=null)
-            {
-                if(pg.piece.isMange())
-                {
-                    pg.vanish();
-                }
-                else
-                {
-                    pg.moveToAnim(getXFromI(p.x), getYFromJ(p.y),8);
-                }
-            }
-        }
-        boolean newEchec = jeuEchecs.estEnEchec();
-        if(newEchec != oldEchec)
-        {
-            if(newEchec)
-            {
-                oldEchec = true;
-                if(jeuEchecs.getJoueur().isBlanc())
-                    rb.echecAuRoi();
-                else
-                    rn.echecAuRoi();
-            }
-            else
-            {
-                oldEchec = false;
-                rb.resetEchecAuRoi();
-                rn.resetEchecAuRoi();
-            }
-            oldEchec = newEchec;
-        }
-    }
-    boolean oldEchec = false;
-    public void iNeedToPromot(JoueurEchecs j)
-    {
-        promotP.setupPiece(j.isBlanc());
-        promotP.appear();
-    }
-    public void thancksForPromot()
-    {
-        promotP.vanish();
-    }
-    //-------------------------------------------------
-    public Piece getPieceSelected()
-    {
-        if(pieceSelected==null)
-            return null;
-        return pieceSelected.piece;
-    }
-    public Point getSelectedPoint()
-    {
-        return selectedPoint;
-    }
-    public Point getCaseSelected()
-    {
-        if(caseSelected==null)
-            return null;
-        return caseSelected.place;
     }
     
-    public void caseClicked(CaseGraphique cg)
-    {
-        caseSelected = cg;
-        pointSelect(cg.place);
-        cg.select();
-    }
-    public void pointSelect(Point p)
-    {
-        selectedPoint = p;
-    }
-    public void pieceClicked(PieceGraphique pg)
-    {
-        /*if(pieceSelected!=null && pg.piece != pieceSelected.piece)
-        {
-            caseClicked(pg.piece.pos.x,pg.piece.pos.y);
-        }
-        else*/
-        if(pieceSelected!=null)
-        {
-            if(pieceSelected.piece.isBlanc() == pg.piece.isBlanc())
-            {
-                pieceSelected.unselect();
-                pieceSelected = pg;
-                pg.select();
-            }
-            else
-            {
-                pointSelect(pg.piece.pos);
-            }
-        }
-        else
-        {
-            pieceSelected = pg;
-            pg.select();
-        }
-    }
-    public void resetSelections()
-    {
-        if(pieceSelected!=null)
-        {
-            pieceSelected.unselect();
-        }if(caseSelected!=null)
-        {
-            caseSelected .unselect();
-        }
-        caseSelected = null;
-        pieceSelected = null;
-        selectedPoint = null;
-    }
-    //-------------------------------------------------
-    public void initEchiquierFX(Pane root)
-    {
-        xOffset = 5;
-        yOffset = caseSize;
-        /*gamerColor = new Rectangle(0,0,width+xOffset*2,height+yOffset*2);
-        gamerColor.setFill(Color.WHITE);
-        root.getChildren().add(gamerColor);*/
-        Rectangle back = new Rectangle(0,0,width+2*xOffset,height+2*yOffset);
-        back.setFill(Color.rgb(52, 73, 94));
-        root.getChildren().add(back);
-        tWidth = (int)back.getWidth();
-        tHeight = (int)back.getHeight();
-        
-        Image img = new Image("chess.jpg");
-        ImageView chessBoard = new ImageView(img);
-        chessBoard.setX(xOffset);
-        chessBoard.setY(yOffset);
-        chessBoard.setFitHeight(caseSize*8);
-        chessBoard.setFitWidth(caseSize*8);
-        root.getChildren().add(chessBoard);
-        
-        for(int i=0;i<8;++i)
-        {
-            for(int j=0;j<8;++j)
-            {
-                int x = getXFromI(i);
-                int j2 = 7-j;
-                int y = getYFromJ(j2);
-                //final Color backColor = (i + j)%2==0?Color.rgb(238, 238, 210):Color.rgb(118, 150, 86);
-                //final Color backColor = (i + j)%2==0?Color.rgb(255,228,196):Color.rgb(139,69,19);
-                final Color backColor = (i + j)%2==0?Color.rgb(0,0,0,0):Color.rgb(139,69,19,0.5);
-                
-                final CaseGraphique cg = new CaseGraphique(new Point(i,j2),x,y,caseSize,backColor);
-                Pane pan = cg.getGraphics();
-                pan.setOnMouseClicked(
-                new EventHandler<MouseEvent>()
-                {
-                    public void handle(MouseEvent e)
-                    {
-                        caseClicked(cg);
-                    }
-                }
-                );
-                root.getChildren().add(pan);
-                }
-        }
-        
-        for(Piece p : jeuEchecs.getEchiquier().getPieces())
-        {
-            introducePieceGraphique(p,root);
-        }
-        
-        promotP = new PromotPanel(this);
-        root.getChildren().add(promotP.getGraphics());
-    }
-    
-    public PieceGraphique introducePieceGraphique(Piece p,Pane root)
-    {
-        int x = getXFromI(p.pos.x);
-        int y = getYFromJ(p.pos.y);
-        final PieceGraphique pg = new PieceGraphique(p,x,y,caseSize);
-        if(p instanceof PieceRoi)
-        {
-            if(p.isBlanc())
-                rb = pg;
-            else
-                rn = pg;
-        }
-        pg.setOpacity(0);
-        pg.fade(true);
-        piecesG.add(pg);
-        pieceTracker.add(p);
-        Pane pan = pg.getGraphics();
-        pan.setOnMouseClicked(
-        new EventHandler<MouseEvent>()
-        {
-            public void handle(MouseEvent e)
-            {
-                pieceClicked(pg);
-            }
-        }
-        );
-        root.getChildren().add(pan);
-        return pg;
-    }
-    
-    public int getXFromI(int i)
-    {
-        return i*caseSize+xOffset;
-    }
-    public int getYFromJ(int j)
-    {
-        int j2 = 7-j;
-        return j2*caseSize+yOffset;
-    }
 
     //-------------------------------------------------
     /**

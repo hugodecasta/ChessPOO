@@ -21,38 +21,87 @@ import java.util.logging.Logger;
  */
 public class JoueurEchecsHumain extends JoueurEchecs
 {
-    ChessPOO affichage;
+    EchiquierGraphique echiquierG;
     
-    public JoueurEchecsHumain(ChessPOO affichage,boolean isBlanc)
+    public JoueurEchecsHumain(boolean isBlanc,int secondes)
     {
-        super(isBlanc);
-        this.affichage = affichage;
+        super(isBlanc,secondes);
+    }
+    
+    public void setEchiquierGraphique(EchiquierGraphique echiquierG)
+    {
+        this.echiquierG = echiquierG;
     }
     
     @Override
     public CoupEchecs getCoup(Echiquier echiquier)
-    { 
-        affichage.resetSelections();
-        boolean colorGood = false;
+    {
+        compteur.start();
+        abandon = false;
+        echiquierG.resetSelections();
+        
+        Piece sPiece = null;
+        while(sPiece==null && !abandon)
+        {
+            sPiece = echiquierG.getPieceSelected();
+            if((sPiece != null && sPiece.isBlanc() != isBlanc) || echiquierG.getCaseSelected()!=null)
+            {
+                sPiece = null;
+                echiquierG.resetSelections();
+            }
+            if(abandon)
+                return null;
+            //-----------------------
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(JoueurEchecsHumain.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            //-----------------------
+        }
+        
+        Point sCase = null;
+        while(sCase==null && !abandon)
+        {
+            sCase = echiquierG.getSelectedPoint();
+            if(abandon)
+                return null;
+            //-----------------------
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(JoueurEchecsHumain.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            //-----------------------
+        }
+        if(abandon)
+            return null;
+        
+        Piece p = echiquierG.getPieceSelected();
+        Point pp = echiquierG.getSelectedPoint();
+        echiquierG.resetSelections();
+        compteur.pause();
+        return new CoupEchecs(p, pp, this);
+        /*boolean colorGood = false;
         while(!colorGood)
         {
-            while(affichage.getPieceSelected()==null)
+            while(echiquierG.getPieceSelected()==null)
             {
-                if(affichage.getCaseSelected()!=null)
-                    affichage.resetSelections();
+                if(echiquierG.getCaseSelected()!=null)
+                    echiquierG.resetSelections();
                 try {
                     Thread.sleep(10);
                 } catch (InterruptedException ex) {
                     Logger.getLogger(JoueurEchecsHumain.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            colorGood = affichage.getPieceSelected().isBlanc() == this.isBlanc();
+            colorGood = echiquierG.getPieceSelected().isBlanc() == this.isBlanc();
             if(!colorGood)
             {
-                affichage.resetSelections();
+                echiquierG.resetSelections();
             }
         }
-        while(affichage.getSelectedPoint()==null)
+        while(echiquierG.getSelectedPoint()==null)
         {
             try {
                 Thread.sleep(10);
@@ -60,18 +109,20 @@ public class JoueurEchecsHumain extends JoueurEchecs
                 Logger.getLogger(JoueurEchecsHumain.class.getName()).log(Level.SEVERE, null, ex);
             } 
         }
-        Piece p = affichage.getPieceSelected();
-        Point pp = affichage.getSelectedPoint();
-        affichage.resetSelections();
-        return new CoupEchecs(p, pp, this);
+        Piece p = echiquierG.getPieceSelected();
+        Point pp = echiquierG.getSelectedPoint();
+        echiquierG.resetSelections();
+        compteur.pause();
+        return new CoupEchecs(p, pp, this);*/
     }
 
     @Override
     public Piece getPromotion()
     {
-        affichage.resetSelections();
-        affichage.iNeedToPromot(this);
-        while(affichage.getPieceSelected()==null)
+        compteur.pause();
+        echiquierG.resetSelections();
+        echiquierG.iNeedToPromot(this);
+        while(echiquierG.getPieceSelected()==null)
         {
             try {
                 Thread.sleep(10);
@@ -79,9 +130,9 @@ public class JoueurEchecsHumain extends JoueurEchecs
                 Logger.getLogger(JoueurEchecsHumain.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        Piece p = affichage.getPieceSelected();
-        affichage.resetSelections();
-        affichage.thancksForPromot();
+        Piece p = echiquierG.getPieceSelected();
+        echiquierG.resetSelections();
+        echiquierG.thancksForPromot();
         return p;
     }
     

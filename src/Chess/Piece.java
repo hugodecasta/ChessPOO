@@ -17,6 +17,7 @@ public abstract class Piece
     private boolean blanc;
     private boolean mange;
     private boolean bouge;
+    public boolean enEchec;
     //-------------------------------------------------------
     public Piece(Point pos, boolean blanc)
     {

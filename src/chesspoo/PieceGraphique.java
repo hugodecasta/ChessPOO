@@ -73,7 +73,6 @@ public class PieceGraphique extends ElementGraphique
     
     public void echecAuRoi()
     {
-        System.out.println("Echec Au ROI");
         unselectedColor = Color.RED;
         selectedColor = Color.rgb(255, 50, 200,1.0);
         hoverColor = Color.rgb(255, 100, 100,0.5);

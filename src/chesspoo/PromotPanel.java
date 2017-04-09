@@ -21,44 +21,42 @@ import javafx.scene.shape.Rectangle;
  */
 public class PromotPanel extends ElementGraphique
 {
-    ChessPOO affichage;
     PieceGraphique dame,cavalier,tour,fou;
-    public PromotPanel(ChessPOO affichage)
+    public PromotPanel(EchiquierGraphique echG)
     {
-        super(0, 0, affichage.tWidth, affichage.tHeight, Color.rgb(0,0,0,0.7), Color.rgb(0,0,0,0.7), Color.rgb(0,0,0,0.7));
+        super(0, 0, echG.sizew, echG.sizeh, Color.rgb(0,0,0,1), Color.rgb(0,0,0,1), Color.rgb(0,0,0,1));
         dame = new PieceGraphique(new PieceDame(new Point(0,0), true), 
-                affichage.getXFromI(3)+affichage.caseSize/2, affichage.getYFromJ(3)+affichage.caseSize/2, affichage.caseSize);
+                echG.getXFromI(3), echG.getYFromJ(3), echG.caseSize);
         cavalier = new PieceGraphique(new PieceCavalier(new Point(0,0), true), 
-                affichage.getXFromI(3)+affichage.caseSize/2, affichage.getYFromJ(4)+affichage.caseSize/2, affichage.caseSize);
+                echG.getXFromI(3), echG.getYFromJ(4), echG.caseSize);
         tour = new PieceGraphique(new PieceTour(new Point(0,0), true), 
-                affichage.getXFromI(4)+affichage.caseSize/2, affichage.getYFromJ(3)+affichage.caseSize/2, affichage.caseSize);
+                echG.getXFromI(4), echG.getYFromJ(3), echG.caseSize);
         fou = new PieceGraphique(new PieceFou(new Point(0,0), true), 
-                affichage.getXFromI(4)+affichage.caseSize/2, affichage.getYFromJ(4)+affichage.caseSize/2, affichage.caseSize);
-        int more = affichage.caseSize/2;
+                echG.getXFromI(4), echG.getYFromJ(4), echG.caseSize);
+        int more = echG.caseSize/2;
         
         
         dame.getGraphics().setOnMouseClicked(
         new EventHandler<MouseEvent>()
         {public void handle(MouseEvent e)
-        {affichage.pieceClicked(dame);}});
+        {echG.pieceClicked(dame);}});
         cavalier.getGraphics().setOnMouseClicked(
         new EventHandler<MouseEvent>()
         {public void handle(MouseEvent e)
-        {affichage.pieceClicked(cavalier);}});
+        {echG.pieceClicked(cavalier);}});
         tour.getGraphics().setOnMouseClicked(
         new EventHandler<MouseEvent>()
         {public void handle(MouseEvent e)
-        {affichage.pieceClicked(tour);}});
+        {echG.pieceClicked(tour);}});
         fou.getGraphics().setOnMouseClicked(
         new EventHandler<MouseEvent>()
         {public void handle(MouseEvent e)
-        {affichage.pieceClicked(fou);}});
+        {echG.pieceClicked(fou);}});
         
-        addElement(dame.getGraphics(),false);
-        addElement(cavalier.getGraphics(),false);
-        addElement(tour.getGraphics(),false);
-        addElement(fou.getGraphics(),false);
-        this.affichage = affichage;
+        addFreeElement(dame.getGraphics());
+        addFreeElement(cavalier.getGraphics());
+        addFreeElement(tour.getGraphics());
+        addFreeElement(fou.getGraphics());
         setOpacity(0);
         pane.setMouseTransparent(true);
     }
@@ -73,16 +71,5 @@ public class PromotPanel extends ElementGraphique
         selectedColor = Color.rgb(col,col,col,0.7);
         hoverColor = Color.rgb(col,col,col,0.7);
         unselectedColor = Color.rgb(col,col,col,0.7);
-    }
-    
-    public void appear()
-    {
-        fade(true);
-        pane.setMouseTransparent(false);
-    }
-    public void vanish()
-    {
-        fade(false);
-        pane.setMouseTransparent(true);
     }
 }

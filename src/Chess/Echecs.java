@@ -14,9 +14,9 @@ import java.util.ArrayList;
 public class Echecs
 {
     Echiquier echiquier;
-    JoueurEchecs joueurB, joueurN;
+    JoueurEchecs joueurB, joueurN, joueurG;
     JoueurEchecs joueur;
-    boolean echec=false;
+    JoueurEchecs estEnEchec;
     
     public Echecs(JoueurEchecs joueurB, JoueurEchecs joueurN)
     {
@@ -26,51 +26,24 @@ public class Echecs
         this.joueurN = joueurN;
     }
     
-    public void initEchecs()
-    {
-        echiquier.initPlateau();
-    }
-    
-    public boolean partieTerminee()
-    {
-        return false;
-    }
-    
-    public JoueurEchecs getJoueur()
-    {
-        return joueur;
-    }
-    
-    public JoueurEchecs joueurSuivant()
-    {
-        if(joueur == null)
-            return joueurB;
-        else if(joueur == joueurB)
-            return joueurN;
-        else
-            return joueurB;
-    }
-    
     public Echiquier getEchiquier()
     {
         return echiquier;
     }
     
-    public JoueurEchecs partie()
+    public JoueurEchecs partie(ModeEchecs mode)
     {
-        while(!partieTerminee())
+        mode.initMode(echiquier,joueurB,joueurN);
+        joueurG = null;
+        
+        while(true)
         {
-            joueur = joueurSuivant();
-            echec = echiquier.echecAuRoi(joueur);
+            joueur = mode.joueurSuivant();
+            estEnEchec = echiquier.echecAuRoi(joueur,true)?joueur:null;
             boolean matPat = echiquier.matOuPat(joueur);
             
             if (matPat)
-            {
-                if (estEnEchec())
-                    System.out.println("MAT");
-                else
-                    System.out.println("PAT");
-                
+            {                
                 return joueur;
             }
             
@@ -78,14 +51,16 @@ public class Echecs
             while(!pieceCoupPossible)
             {
                 CoupEchecs coup = joueur.getCoup(echiquier);
+                if(coup == null)
+                    return mode.joueurSuivant();
                 pieceCoupPossible = echiquier.testeJoueCoup(coup);
             }
+            estEnEchec = echiquier.echecAuRoi(joueur,true)?joueur:null;
         }
-        return joueur;
     }
     
-    public boolean estEnEchec()
+    public JoueurEchecs estEnEchec()
     {
-        return echec;
+        return estEnEchec;
     }
 }
