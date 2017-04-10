@@ -62,9 +62,14 @@ public class Echecs
             boolean matPat = echiquier.matOuPat(joueur);
             
             if (matPat)
-            {                
-                return mode.joueurSuivant();
+            {         
+                if (estEnEchec != null)
+                    return mode.joueurSuivant();
+                else
+                    return null;
             }
+            if (echiquier.pasAssezPieces())
+                return null;
             
             boolean pieceCoupPossible = false;
             while(!pieceCoupPossible)
