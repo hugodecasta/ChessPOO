@@ -12,6 +12,8 @@ import Chess.Piece;
 import Chess.PieceDame;
 import Chess.Point;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -28,6 +30,7 @@ public class RandomAuPlayer extends JoueurEchecs
     @Override
     public CoupEchecs getCoup(Echiquier echiquier)
     {
+        compteur.start();
         ArrayList<Piece> pieces = echiquier.getPieces();
         ArrayList<Piece> goods = new ArrayList<>();
         for(Piece p:pieces)
@@ -40,6 +43,7 @@ public class RandomAuPlayer extends JoueurEchecs
         int randPoint = (int)(Math.random()*points.size());
         Point pp = points.get(randPoint);
         CoupEchecs coup = new CoupEchecs(p, pp, this);
+        compteur.pause();
         return coup;
     }
 
