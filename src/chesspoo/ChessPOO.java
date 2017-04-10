@@ -7,6 +7,7 @@ package chesspoo;
 
 import Chess.Echecs;
 import Chess.JoueurEchecs;
+import Chess.ModeEchecs;
 import Chess.Piece;
 import Chess.PieceRoi;
 import Chess.Point;
@@ -49,7 +50,7 @@ public class ChessPOO extends Application
     
     AnchorPane globalPan;
     
-    AnchorPane modePane;
+    ModePanel modePanel;
     ControlPanel controlPanel;
     MatPanel matPanel;
     
@@ -64,6 +65,7 @@ public class ChessPOO extends Application
         
         initEchecsLogic();
         initEchecsGraphics();
+        initModes();
         
         startAll(primaryStage);
     }
@@ -120,29 +122,48 @@ public class ChessPOO extends Application
         matPanel = new MatPanel(caseSize);
         globalPan.getChildren().add(matPanel.getGraphics());
     }
+    public void initModes()
+    {
+        ArrayList<ModeEchecs>myModes = new ArrayList<>();
+        
+        JoueurEchecsHumain jb = new JoueurEchecsHumain(true);
+        JoueurEchecsHumain jn = new JoueurEchecsHumain(false);
+        jb.setEchiquierGraphique(echecsGraphiques);
+        jn.setEchiquierGraphique(echecsGraphiques);
+        
+        myModes.add(new ModeHumain(jb,jn,1));
+        myModes.add(new ModeAIrandom(jb));
+        
+        modePanel = new ModePanel(caseSize, myModes, this);
+        globalPan.getChildren().add(modePanel.getGraphics());
+        
+    }
     //----------------------------------------------------------------------
     //----------------------------------------------------------------------
     @Override
     public void stop()
     {
-        jeu.stop();
+        if(jeu!=null)
+            jeu.stop();
     }
     public void startAsker()
     {
+        modePanel.appear();
+    }
+    
+    public void startGame(ModeEchecs mode)
+    {
+        modePanel.vanish();
         jeu = new Thread(){
             @Override
             public void run()
             {
-                JoueurEchecsHumain jb = new JoueurEchecsHumain(true);
-                JoueurEchecsHumain jn = new JoueurEchecsHumain(false);
-                jb.setEchiquierGraphique(echecsGraphiques);
-                jn.setEchiquierGraphique(echecsGraphiques);
-                gagnant = jeuEchecs.partie(new ModeHumain(jb, jn, 1));
+                gagnant = jeuEchecs.partie(mode);
                 matPanel.winning(gagnant);
             }
         };
         jeu.start();
-    }    
+    }
 
     //-------------------------------------------------
     /**

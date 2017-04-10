@@ -22,16 +22,12 @@ import javafx.scene.text.Text;
  */
 public class ControlPanel extends ElementGraphique
 {
-    JoueurEchecs joueurBlanc, joueurNoir;
     Text compteurB,compteurN;
     Echecs jeu;
     
     public ControlPanel(int caseSize,Echecs jeu) {
         super(0, 0, caseSize*8,caseSize*10, Color.rgb(100,100,100), Color.rgb(100,100,100), Color.rgb(100,100,100));
-        
-        this.joueurBlanc = jeu.getJoueurBlanc();
-        this.joueurNoir = jeu.getJoueurNoir();
-        
+                
         this.jeu = jeu;
         
         compteurB = new Text("COUCOU");
@@ -69,7 +65,7 @@ public class ControlPanel extends ElementGraphique
         {
             public void handle(MouseEvent e)
             {
-                joueurBlanc.abandonner();
+                jeu.getJoueurBlanc().abandonner();
             }
         }
         );
@@ -78,7 +74,7 @@ public class ControlPanel extends ElementGraphique
         {
             public void handle(MouseEvent e)
             {
-                joueurNoir.abandonner();
+                jeu.getJoueurNoir().abandonner();
             }
         }
         );
@@ -86,15 +82,12 @@ public class ControlPanel extends ElementGraphique
     
     public void updateControles()
     {
-        if(joueurBlanc==null)
-            this.joueurBlanc = jeu.getJoueurBlanc();
-        if(joueurNoir==null)
-            this.joueurNoir = jeu.getJoueurNoir();
+        if(jeu.getJoueurBlanc()==null)
+            return;
+        compteurB.setText(getTimeString(jeu.getJoueurBlanc().getCompteur().getTime()));
+        compteurN.setText(getTimeString(jeu.getJoueurNoir().getCompteur().getTime()));
         
-        compteurB.setText(getTimeString(joueurBlanc.getCompteur().getTime()));
-        compteurN.setText(getTimeString(joueurNoir.getCompteur().getTime()));
-        
-        if(jeu.getJoueurActuel() == joueurNoir)
+        if(jeu.getJoueurActuel() == jeu.getJoueurNoir())
         {
             compteurB.setFill(Color.gray(0.5));
             compteurN.setFill(Color.gray(1));
