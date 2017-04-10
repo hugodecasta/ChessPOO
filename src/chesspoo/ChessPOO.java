@@ -7,7 +7,6 @@ package chesspoo;
 
 import Chess.Echecs;
 import Chess.JoueurEchecs;
-import Chess.ModeSimple;
 import Chess.Piece;
 import Chess.PieceRoi;
 import Chess.Point;
@@ -47,8 +46,6 @@ public class ChessPOO extends Application
     int xOffset;
     int yOffset;
     int caseSize;
-    
-    JoueurEchecs joueurBlanc,joueurNoir;
     
     AnchorPane globalPan;
     
@@ -97,9 +94,7 @@ public class ChessPOO extends Application
     //-----------------------------
     private void initEchecsLogic()
     {
-        joueurBlanc = new JoueurEchecsHumain(true);
-        joueurNoir = new JoueurEchecsHumain(false);
-        jeuEchecs = new Echecs(joueurBlanc,joueurNoir);
+        jeuEchecs = new Echecs();
     }
     //-----------------------------
     private void initWindow(Stage primaryStage)
@@ -121,8 +116,6 @@ public class ChessPOO extends Application
         // Echiquier
         echecsGraphiques = new EchiquierGraphique(0, caseSize, caseSize, jeuEchecs.getEchiquier());
         globalPan.getChildren().add(echecsGraphiques.getGraphics());
-        ((JoueurEchecsHumain)joueurBlanc).setEchiquierGraphique(echecsGraphiques);
-        ((JoueurEchecsHumain)joueurNoir).setEchiquierGraphique(echecsGraphiques);
         // Mat
         matPanel = new MatPanel(caseSize);
         globalPan.getChildren().add(matPanel.getGraphics());
@@ -140,7 +133,11 @@ public class ChessPOO extends Application
             @Override
             public void run()
             {
-                gagnant = jeuEchecs.partie(new ModeSimple());
+                JoueurEchecsHumain jb = new JoueurEchecsHumain(true);
+                JoueurEchecsHumain jn = new JoueurEchecsHumain(false);
+                jb.setEchiquierGraphique(echecsGraphiques);
+                jn.setEchiquierGraphique(echecsGraphiques);
+                gagnant = jeuEchecs.partie(new ModeHumain(jb, jn, 1));
                 matPanel.winning(gagnant);
             }
         };

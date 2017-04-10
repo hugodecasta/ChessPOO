@@ -18,12 +18,16 @@ public class Echecs
     JoueurEchecs joueur;
     JoueurEchecs estEnEchec;
     
-    public Echecs(JoueurEchecs joueurB, JoueurEchecs joueurN)
+    public Echecs()
     {
         echiquier = new Echiquier();
         joueur = null;
-        this.joueurB = joueurB;
-        this.joueurN = joueurN;
+    }
+    
+    public void setJoueurs(JoueurEchecs jb, JoueurEchecs jn)
+    {
+        this.joueurB = jb;
+        this.joueurN = jn;
     }
     
     public Echiquier getEchiquier()

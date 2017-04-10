@@ -86,6 +86,11 @@ public class ControlPanel extends ElementGraphique
     
     public void updateControles()
     {
+        if(joueurBlanc==null)
+            this.joueurBlanc = jeu.getJoueurBlanc();
+        if(joueurNoir==null)
+            this.joueurNoir = jeu.getJoueurNoir();
+        
         compteurB.setText(getTimeString(joueurBlanc.getCompteur().getTime()));
         compteurN.setText(getTimeString(joueurNoir.getCompteur().getTime()));
         

@@ -34,6 +34,11 @@ public abstract class JoueurEchecs
         return compteur;
     }
     
+    public void setCompteur(CompteurEchecs c)
+    {
+        compteur = c;
+    }
+    
     public void abandonner()
     {
         abandon = true;
