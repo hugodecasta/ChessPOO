@@ -132,6 +132,8 @@ public class ChessPOO extends Application
         jn.setEchiquierGraphique(echecsGraphiques);
         
         myModes.add(new ModeHumain(jb,jn,1));
+        myModes.add(new ModeHumain(jb,jn,5));
+        myModes.add(new ModeHumain(jb,jn,10));
         myModes.add(new ModeAIrandom(jb));
         
         modePanel = new ModePanel(caseSize, myModes, this);

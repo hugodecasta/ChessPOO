@@ -35,7 +35,7 @@ public class ModeHumain extends ModeEchecs
 
     @Override
     public String toString() {
-        return "Humain 1 min";
+        return "Humain "+minutes+" min";
     }
 
     @Override

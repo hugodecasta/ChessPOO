@@ -106,7 +106,7 @@ public class ControlPanel extends ElementGraphique
         long M = trueSecondes/60-(H*60);
         long S = trueSecondes-(M*60);
         long milli = secondes-(trueSecondes-(M*60))*1000;
-        if(S>20)
+        if(S>20 || M>=1 || H>=1)
         {
             return M+":"+S;
         }
