@@ -34,7 +34,11 @@ public class MatPanel extends ElementGraphique
     
     public void winning(JoueurEchecs joueur)
     {
-        String str = joueur.isBlanc()?"Les blancs gagnent":"Les noirs gagnent";
+        String str = "";
+        if(joueur != null)
+            str = joueur.isBlanc()?"Les blancs gagnent":"Les noirs gagnent";
+        else
+            str = "Game Drawn";
         winner.setText(str);
         appear();
     }
