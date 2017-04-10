@@ -402,6 +402,45 @@ public class Echiquier
         return true; // mat ou pat
     }
     
+    public boolean pasAssezPieces()
+    {
+        if (pieces.size() > 5)
+            return false; // il reste trop de pièces pour faire nulle selon les règles
+        
+        int nbCavalierB = 0, nbCavalierN = 0;
+        int nbFouB = 0, nbFouN = 0;
+        for (Piece p : pieces)
+        {
+            if (p instanceof PiecePion
+                    || p instanceof PieceTour
+                    || p instanceof PieceDame)
+                return false;
+            
+            if (p instanceof PieceFou)
+            {
+                if (p.isBlanc())
+                    nbFouB++;
+                else
+                    nbFouN++;
+            }
+            else if (p instanceof PieceCavalier)
+            {
+                if (p.isBlanc())
+                    nbCavalierB++;
+                else
+                    nbCavalierN++;
+            }
+        }
+        
+        if (nbFouB == 2
+                || nbFouN == 2
+                || (nbFouB == 1 && nbCavalierB > 0)
+                || (nbFouN == 1 && nbCavalierN > 0))
+            return false;
+        
+        return true; // nulle dans tous les autres cas
+    }
+    
     @Override
     public String toString()
     {
