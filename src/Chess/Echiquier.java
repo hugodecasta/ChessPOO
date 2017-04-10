@@ -75,6 +75,8 @@ public class Echiquier
                 || coup.sortie.y < 0
                 || coup.sortie.y > 7)
             return null;
+        if (coup.piece.isMange())
+            return null;
         
         ArrayList<Point> coupsPossibles = coup.piece.pointsPossibles();
         for (Point pt : coupsPossibles)
@@ -83,7 +85,7 @@ public class Echiquier
             {
                 //on vérifie si la case est occupée
                 Piece pieceCible = pointOccupe(coup.sortie);
-                boolean cibleNulle = (pieceCible == null); 
+                boolean cibleNulle = (pieceCible == null || pieceCible.isMange()); 
                 boolean memeCouleur = (!cibleNulle && (pieceCible.isBlanc() == coup.piece.isBlanc()));
                 if (memeCouleur)
                     return null; // on ne mange pas ses potes
@@ -309,12 +311,13 @@ public class Echiquier
     {
         return echecAuRoi(joueur,false);
     }
-    public boolean echecAuRoi(JoueurEchecs joueur,boolean updateRoi)
+    
+    public boolean echecAuRoi(JoueurEchecs joueur, boolean updateRoi, ArrayList<Piece> listePieces)
     {
         CoupEchecs coupTemp = new CoupEchecs(null, null, joueur);
         boolean couleurRoi = joueur.isBlanc();
         Piece roi = null;
-        for (Piece p : pieces)
+        for (Piece p : listePieces)
         { // on trouve la position du roi
             if (p instanceof PieceRoi)
             {
@@ -329,7 +332,7 @@ public class Echiquier
             }
         }
         
-        for (Piece p2 : pieces)
+        for (Piece p2 : listePieces)
         {
             if (p2.isBlanc() != couleurRoi)
             {
@@ -344,6 +347,11 @@ public class Echiquier
         }
         return false;
     }
+    public boolean echecAuRoi(JoueurEchecs joueur, boolean updateRoi)
+    {
+        return echecAuRoi(joueur, updateRoi, pieces);
+    }
+    
     public Piece pieceEnEchec()
     {
         return pieceEnEchec;
@@ -367,17 +375,17 @@ public class Echiquier
                     if (cible != null)
                     {
                         p.pos = coupTemp.sortie;
-                        /*if (cible != p)
-                            piecesPoub.add(cible);*/
+                        if (cible != p)
+                            cible.seFaitManger();
 
                         boolean isEchec = echecAuRoi(joueur);
 
                         // Debut remise en place
                         p.pos = oldPosPiece;
-                        /*if (cible.isMange())
+                        if (cible.isMange())
                         {
-                            ressusciterPiece(cible);
-                        }*/
+                            cible.resurrection();
+                        }
                         // fin remise en place
 
                         if (!isEchec)
