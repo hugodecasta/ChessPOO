@@ -27,6 +27,7 @@ public class ModeHumain extends ModeEchecs
     @Override
     public void initMode(Echecs jeu)
     {
+        act = null;
         jeu.setJoueurs(joueurBlanc, joueurNoir);
         jeu.getEchiquier().initPlateau();
         joueurBlanc.setCompteur(new CompteurEchecs(minutes*60*1000));

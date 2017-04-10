@@ -25,6 +25,7 @@ public class ModeAIrandom extends ModeEchecs
     @Override
     public void initMode(Echecs jeu)
     {
+        act = null;
         jeu.setJoueurs(jb, jn);
         jeu.getEchiquier().initPlateau();
         jb.setCompteur(new CompteurEchecs(50*60*1000));

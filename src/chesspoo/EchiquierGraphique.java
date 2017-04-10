@@ -76,8 +76,17 @@ public class EchiquierGraphique extends ElementGraphique
         }
         PieceGraphique newPEnEchec = null;
         boolean echecChanged = false;
+        ArrayList<PieceGraphique>toRemove = new ArrayList<>();
+        ArrayList<Piece>toRemoveTracker = new ArrayList<>();
         for(PieceGraphique pg : piecesG)
         {
+            if(pg.piece.isMange())
+            {
+                toRemoveTracker.add(pg.piece);
+                if(pg.opacity==0)
+                    toRemove.add(pg);
+            }
+            
             Point p = pg.updatePiece();
             if(p!=null)
             {
@@ -106,6 +115,11 @@ public class EchiquierGraphique extends ElementGraphique
         }
         if(echecChanged)
             pEnEchec = newPEnEchec;
+        
+        for(PieceGraphique p: toRemove)
+            piecesG.remove(p);
+        for(Piece p: toRemoveTracker)
+            pieceTracker.remove(p);
     }
     //-----------------------------------------------------PROMOT
     public void iNeedToPromot(JoueurEchecs j)
@@ -161,6 +175,7 @@ public class EchiquierGraphique extends ElementGraphique
         final PieceGraphique pg = new PieceGraphique(p,x,y,caseSize);
         if(p instanceof PieceRoi)
         {
+            pEnEchec = null;
             if(p.isBlanc())
                 roiB = pg;
             else
