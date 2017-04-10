@@ -59,7 +59,7 @@ public class Echecs
             
             if (matPat)
             {                
-                return joueur;
+                return mode.joueurSuivant();
             }
             
             boolean pieceCoupPossible = false;

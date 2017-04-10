@@ -23,8 +23,19 @@ public class Echiquier
         coups = new ArrayList<>();
     }
     
+    public void clearPlateau()
+    {
+        if(pieces==null)
+            return;
+        
+        ArrayList<Piece>poubelle = new ArrayList<>(pieces);
+        for(Piece p : poubelle)
+            mangerPiece(p);
+    }
+    
     public void initPlateau()
     {
+        clearPlateau();
         pieces = new ArrayList<>();
         placePieceCouleur(true);
         placePieceCouleur(false);
@@ -351,7 +362,7 @@ public class Echiquier
                 points = p.pointsPossibles();
                 for (Point pt : points)
                 {
-                    coupTemp.sortie = pt;
+                    coupTemp.sortie = pt; 
                     Piece cible = coupsPossible(coupTemp);
                     if (cible != null)
                     {
