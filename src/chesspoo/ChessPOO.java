@@ -134,6 +134,7 @@ public class ChessPOO extends Application
         myModes.add(new ModeHumain(jb,jn,1));
         myModes.add(new ModeHumain(jb,jn,5));
         myModes.add(new ModeHumain(jb,jn,10));
+        myModes.add(new Mode960(jb,jn));
         myModes.add(new ModeAIrandom(jb));
         myModes.add(new ModeIaIa());
         

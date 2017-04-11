@@ -41,6 +41,54 @@ public class Echiquier
         placePieceCouleur(false);
     }
     
+    public void initPlateau960()
+    {
+        clearPlateau();
+        pieces = new ArrayList<>();
+        placePiece960();
+    }
+    
+    public void placePiece960()
+    {
+        for(int i=0;i<8;++i)
+        {
+            pieces.add(new PiecePion(new Point(i,1),true));
+            pieces.add(new PiecePion(new Point(i,6),false));
+        }
+        
+        ArrayList<Piece>piB = new ArrayList<>();
+        ArrayList<Piece>piN = new ArrayList<>();
+        
+        for(int i=0;i<2;++i)
+        {
+            piB.add(new PieceTour(new Point(0,0), true));
+            piN.add(new PieceTour(new Point(0,0), false));
+            
+            piB.add(new PieceCavalier(new Point(0,0), true));
+            piN.add(new PieceCavalier(new Point(0,0), false));
+            
+            piB.add(new PieceFou(new Point(0,0), true));
+            piN.add(new PieceFou(new Point(0,0), false));
+        }
+        piB.add(new PieceDame(new Point(0,0), true));
+        piN.add(new PieceDame(new Point(0,0), false));
+        piB.add(new PieceRoi(new Point(0,0), true));
+        piN.add(new PieceRoi(new Point(0,0), false));
+        
+        for(int i=0;i<8;++i)
+        {
+            int rand = (int)(Math.random()*piB.size());
+            piB.get(rand).pos = new Point(i,0);
+            piN.get(rand).pos = new Point(i,7);
+            
+            pieces.add(piB.get(rand));
+            pieces.add(piN.get(rand));
+            
+            piB.remove(rand);
+            piN.remove(rand);
+        }
+    }
+    
     public ArrayList<Piece> getPieces()
     {
         return pieces;

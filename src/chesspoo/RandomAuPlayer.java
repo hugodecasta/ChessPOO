@@ -21,16 +21,25 @@ import java.util.logging.Logger;
  */
 public class RandomAuPlayer extends JoueurEchecs
 {
-
-    public RandomAuPlayer(boolean isBlanc)
+    int milliSimu;
+    public RandomAuPlayer(boolean isBlanc, int sleepTime)
     {
         super(isBlanc);
+        milliSimu = sleepTime;
     }
 
     @Override
     public CoupEchecs getCoup(Echiquier echiquier)
     {
         compteur.start();
+        try
+        {
+            Thread.sleep(milliSimu);
+        }
+        catch (InterruptedException ex)
+        {
+            Logger.getLogger(RandomAuPlayer.class.getName()).log(Level.SEVERE, null, ex);
+        }
         ArrayList<Piece> pieces = echiquier.getPieces();
         ArrayList<Piece> goods = new ArrayList<>();
         for(Piece p:pieces)

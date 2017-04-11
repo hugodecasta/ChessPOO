@@ -14,20 +14,20 @@ import Chess.ModeEchecs;
  *
  * @author p1608557
  */
-public class ModeIaIa extends ModeEchecs
+public class Mode960 extends ModeEchecs
 {
     JoueurEchecs jb, jn, act;
-    public ModeIaIa()
+    public Mode960(JoueurEchecsHumain jb,JoueurEchecsHumain jn)
     {
-        jb = new RandomAuPlayer(true,20);
-        jn = new RandomAuPlayer(false,20);
+        this.jb = jb;
+        this.jn = jn;
     }
     @Override
     public void initMode(Echecs jeu)
     {
         act = null;
         jeu.setJoueurs(jb, jn);
-        jeu.getEchiquier().initPlateau();
+        jeu.getEchiquier().initPlateau960();
         jb.setCompteur(new CompteurEchecs(50*60*1000));
         jn.setCompteur(new CompteurEchecs(50*60*1000));
     }
@@ -35,7 +35,7 @@ public class ModeIaIa extends ModeEchecs
     @Override
     public String toString()
     {
-        return "IA vs IA";
+        return "Chess 960";
     }
 
     @Override

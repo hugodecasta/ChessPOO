@@ -28,6 +28,7 @@ public class PieceGraphique extends ElementGraphique
     Piece piece;
     Point oldPos;
     boolean oldMange;
+    boolean oldEchec;
     Text backText,frontText;
 
     public PieceGraphique(Piece piece,int x,int y,int size) 

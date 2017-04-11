@@ -75,7 +75,6 @@ public class EchiquierGraphique extends ElementGraphique
             }
         }
         PieceGraphique newPEnEchec = null;
-        boolean echecChanged = false;
         ArrayList<PieceGraphique>toRemove = new ArrayList<>();
         ArrayList<Piece>toRemoveTracker = new ArrayList<>();
         for(PieceGraphique pg : piecesG)
@@ -100,21 +99,22 @@ public class EchiquierGraphique extends ElementGraphique
                 }
             }
                 
-            if(pEnEchec==pg && !pg.piece.enEchec)
+            if(pg.oldEchec != pg.piece.enEchec)
             {
-                pg.resetEchecAuRoi();
-                newPEnEchec = newPEnEchec==null?null:newPEnEchec;
-                echecChanged = true;
+                if(pg.piece.enEchec)
+                    pg.echecAuRoi();
+                else
+                    pg.resetEchecAuRoi();
+                pg.oldEchec = pg.piece.enEchec;
             }
-            else if(pEnEchec!=pg && pg.piece.enEchec)
+            else
             {
-                newPEnEchec = pg;
-                pg.echecAuRoi();
-                echecChanged = true;
+                if(pg.unselectedColor.getRed()==0 && pg.piece.enEchec)
+                    pg.echecAuRoi();
+                if(pg.unselectedColor.getRed()==255 && !pg.piece.enEchec)
+                    pg.resetEchecAuRoi();
             }
         }
-        if(echecChanged)
-            pEnEchec = newPEnEchec;
         
         for(PieceGraphique p: toRemove)
             piecesG.remove(p);

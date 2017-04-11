@@ -20,7 +20,7 @@ public class ModeAIrandom extends ModeEchecs
     public ModeAIrandom(JoueurEchecsHumain jb)
     {
         this.jb = jb;
-        jn = new RandomAuPlayer(false);
+        jn = new RandomAuPlayer(false,0);
     }
     @Override
     public void initMode(Echecs jeu)
