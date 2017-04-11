@@ -179,6 +179,8 @@ public class Echiquier
                         int yPassant = coup.piece.isBlanc() ? 4 : 3;
                         if (cibleNulle)
                         {
+                            if(coups.size()<=0)
+                                return null;
                             CoupEchecs coupPrec = coups.get(coups.size()-1);
                             if (coup.piece.pos.y == yPassant
                                     && coupPrec.piece instanceof PiecePion

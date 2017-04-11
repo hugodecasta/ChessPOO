@@ -6,6 +6,8 @@
 package Chess;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -72,6 +74,7 @@ public class Echecs
                 return null;
             
             boolean pieceCoupPossible = false;
+            
             while(!pieceCoupPossible)
             {
                 CoupEchecs coup = joueur.getCoup(echiquier);
