@@ -296,6 +296,46 @@ public class Echiquier
         }
         return null;
     }
+    
+    public ArrayList<CoupEchecs> CoupsValidesPiece(Piece p, JoueurEchecs joueur)
+    {
+        ArrayList<CoupEchecs> listeCoup = new ArrayList<>();
+        for (Point pt : p.pointsPossibles())
+        {
+            CoupEchecs coup = new CoupEchecs(p, pt, joueur);
+            if (coupValide(coup))
+                listeCoup.add(coup);
+        }
+        
+        return listeCoup;
+    }
+    
+    public boolean coupValide(CoupEchecs coup)
+    {
+        Piece p = coupsPossible(coup);
+        if (p == null)
+            return false;
+
+        Point posPiece = (Point) coup.piece.pos.clone();
+        
+        if (p != coup.piece)
+            p.seFaitManger();
+        coup.piece.pos = coup.sortie;
+        
+        boolean res;
+        if (echecAuRoi(coup.joueur))
+            res = false;
+        else
+            res = true;
+        
+        if (p.isMange())
+        {
+            p.resurrection();
+        }   
+        coup.piece.pos = posPiece;
+        return res;
+    }
+    
     public boolean testeJoueCoup(CoupEchecs coup)
     {
         Piece p = coupsPossible(coup);
