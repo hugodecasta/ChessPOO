@@ -79,7 +79,7 @@ public class PieceGraphique extends ElementGraphique
         hoverColor = Color.rgb(255, 100, 100,0.5);
         new AnimationTimer()
         {
-            int duration = 20;
+            int duration = 1;
             float opacityStart = 0;
             float opacityGoal = 1;
             int time = 0;
@@ -108,7 +108,7 @@ public class PieceGraphique extends ElementGraphique
         hoverColor = Color.rgb(241, 196, 15,0.5);
         new AnimationTimer()
         {
-            int duration = 20;
+            int duration = 1;
             float opacityStart = 0;
             float opacityGoal = 1;
             int time = 0;

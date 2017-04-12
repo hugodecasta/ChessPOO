@@ -19,8 +19,8 @@ public class ModeIaIa extends ModeEchecs
     JoueurEchecs jb, jn, act;
     public ModeIaIa()
     {
-        jb = new RandomAuPlayer(true,20);
-        jn = new RandomAuPlayer(false,20);
+        jb = new RandomAuPlayer(true,200);
+        jn = new RandomAuPlayer(false,200);
     }
     @Override
     public void initMode(Echecs jeu)

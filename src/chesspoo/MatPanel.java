@@ -27,7 +27,7 @@ public class MatPanel extends ElementGraphique
         pane.setMouseTransparent(true);
         winner = new Text("No one");
         winner.setFill(Color.WHITE);
-        winner.setFont(new Font(30));
+        winner.setFont(new Font(caseSize/2));
         addElement(winner);
         
     }

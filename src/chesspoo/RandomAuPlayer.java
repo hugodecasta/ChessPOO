@@ -45,10 +45,14 @@ public class RandomAuPlayer extends JoueurEchecs
         for(Piece p:pieces)
             if(p.isBlanc() == isBlanc)
                 goods.add(p);
-        
-        int randPiece = (int)(Math.random()*goods.size());
-        Piece p = goods.get(randPiece);
-        ArrayList<Point> points = p.pointsPossibles();
+        ArrayList<Point> points = new ArrayList<>(0);
+        Piece p = null;
+        while(points.size()==0)
+        {
+            int randPiece = (int)(Math.random()*goods.size());
+            p = goods.get(randPiece);
+            points = echiquier.CoupsValidesPiece(p,this);//p.pointsPossibles();
+        }
         int randPoint = (int)(Math.random()*points.size());
         Point pp = points.get(randPoint);
         CoupEchecs coup = new CoupEchecs(p, pp, this);

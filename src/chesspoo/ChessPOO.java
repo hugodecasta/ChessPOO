@@ -111,12 +111,13 @@ public class ChessPOO extends Application
     //-----------------------------
     private void initEchecsGraphics()
     {
-        caseSize = 60;
+        caseSize = 80;
         // Background
         controlPanel = new ControlPanel(caseSize, jeuEchecs);
         globalPan.getChildren().add(controlPanel.getGraphics());
         // Echiquier
         echecsGraphiques = new EchiquierGraphique(0, caseSize, caseSize, jeuEchecs.getEchiquier());
+        echecsGraphiques.jeu = jeuEchecs;
         globalPan.getChildren().add(echecsGraphiques.getGraphics());
         // Mat
         matPanel = new MatPanel(caseSize);

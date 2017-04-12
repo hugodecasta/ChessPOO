@@ -17,12 +17,24 @@ import javafx.scene.shape.Rectangle;
 public class CaseGraphique extends ElementGraphique
 {
     Point place;
+    Rectangle rect;
     
     public CaseGraphique(Point p,int x,int y, int size, Color backColor)
     {
         super(x,y,size,backColor,Color.rgb(241, 196, 15,1.0),Color.rgb(241, 196, 15,0.5));
         place = p;
+        rect = new Rectangle(0,0,size,size);
+        rect.setFill(Color.rgb(0, 0, 0,0));
+        addFreeElement(rect);
     }
     
+    public void selectSpecial()
+    {
+        rect.setFill(Color.rgb(255,50,20,0.5));
+    }
+    public void unselectSpecial()
+    {
+        rect.setFill(Color.rgb(0,0,0,0));
+    }
     
 }

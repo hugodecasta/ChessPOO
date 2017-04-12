@@ -5,6 +5,7 @@
  */
 package chesspoo;
 
+import Chess.Echecs;
 import Chess.Echiquier;
 import Chess.JoueurEchecs;
 import Chess.Piece;
@@ -38,6 +39,8 @@ public class EchiquierGraphique extends ElementGraphique
     AnchorPane global,anPane;
     PromotPanel promotP;
     PieceGraphique pEnEchec;
+    CaseGraphique[][] tabCaseG;
+    public Echecs jeu;
     
     
     public EchiquierGraphique(int x,int y, int caseSize, Echiquier echiquier) {
@@ -64,8 +67,24 @@ public class EchiquierGraphique extends ElementGraphique
         }.start();
     }
     //-----------------------------------------------------UPDATE
+    PieceGraphique oldPieceSelected = null;
     public void updatePlateau()
     {
+        if(oldPieceSelected!=pieceSelected || oldPieceSelected==null)
+        {
+            for(int i=0;i<8;++i)
+                for(int j=0;j<8;++j)
+                    tabCaseG[i][j].unselectSpecial();
+            if(pieceSelected!=null)
+            {
+                ArrayList<Point>points = echiquier.CoupsValidesPiece(pieceSelected.piece, jeu.getJoueurActuel());
+                for(Point pt : points)
+                {
+                    tabCaseG[pt.x][pt.y].selectSpecial();
+                }
+                oldPieceSelected = pieceSelected;
+            }
+        }
         ArrayList<Piece> pp = echiquier.getPieces();
         for(Piece p : pp)
         {
@@ -143,6 +162,7 @@ public class EchiquierGraphique extends ElementGraphique
         chessBoard.setFitWidth(caseSize*8);
         anPane.getChildren().add(chessBoard);
         
+        tabCaseG = new CaseGraphique[8][8];
         for(int i=0;i<8;++i)
         {
             for(int j=0;j<8;++j)
@@ -153,6 +173,7 @@ public class EchiquierGraphique extends ElementGraphique
                 final Color backColor = (i + j)%2==0?Color.rgb(0,0,0,0):Color.rgb(139,69,19,0.5);
                 
                 final CaseGraphique cg = new CaseGraphique(new Point(i,j2),x,y,caseSize,backColor);
+                tabCaseG[i][j2] = cg;
                 Pane pan = cg.getGraphics();
                 pan.setOnMouseClicked(
                 new EventHandler<MouseEvent>()
@@ -259,6 +280,7 @@ public class EchiquierGraphique extends ElementGraphique
         caseSelected = null;
         pieceSelected = null;
         selectedPoint = null;
+        oldPieceSelected = null;
     }
     //---------------------------------------------------------------------
     public int getXFromI(int i)

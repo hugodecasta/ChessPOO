@@ -31,13 +31,13 @@ public class ControlPanel extends ElementGraphique
         this.jeu = jeu;
         
         compteurB = new Text("Blanc");
-        compteurB.setFont(new Font(30));
+        compteurB.setFont(new Font(caseSize/2));
         compteurB.setFill(Color.WHITE);
         compteurB.setX(sizew/2);
-        compteurB.setY(sizeh-15);
+        compteurB.setY(caseSize*9+caseSize/2+5);
         
         compteurN = new Text("Noir");
-        compteurN.setFont(new Font(30));
+        compteurN.setFont(new Font(caseSize/2));
         compteurN.setFill(Color.WHITE);
         compteurN.setX(sizew/2);
         compteurN.setY(caseSize-15);

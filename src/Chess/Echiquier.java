@@ -115,8 +115,11 @@ public class Echiquier
             pieces.add(new PiecePion(new Point(i,yPion),estBlanc));
         }
     }
-    
     public Piece coupsPossible(CoupEchecs coup)
+    {
+        return coupsPossible(coup, true);
+    }
+    public Piece coupsPossible(CoupEchecs coup, boolean updatePiece)
     {
         if (coup.sortie.x < 0
                 || coup.sortie.x > 7
@@ -170,7 +173,9 @@ public class Echiquier
                                     coup.piece.pos.x++; // on remet le roi en place 
                              
                                     if(!echecsInterm){
-                                        testeJoueCoup(new CoupEchecs(tour, new Point(3, tour.pos.y), coup.joueur));
+                                        if (updatePiece)
+                                            testeJoueCoup(new CoupEchecs(tour, new Point(3, tour.pos.y), coup.joueur));
+                                        
                                         return coup.piece;
                                     }
                                 }
@@ -189,7 +194,9 @@ public class Echiquier
                                     coup.piece.pos.x--; // on remet le roi en place                                   
                                     
                                     if (!echecInterm){
-                                        testeJoueCoup(new CoupEchecs(tour, new Point(5, tour.pos.y), coup.joueur));
+                                        if (updatePiece)
+                                            testeJoueCoup(new CoupEchecs(tour, new Point(5, tour.pos.y), coup.joueur));
+                                        
                                         return coup.piece;
                                     }
                                 }
@@ -297,14 +304,14 @@ public class Echiquier
         return null;
     }
     
-    public ArrayList<CoupEchecs> CoupsValidesPiece(Piece p, JoueurEchecs joueur)
+    public ArrayList<Point> CoupsValidesPiece(Piece p, JoueurEchecs joueur)
     {
-        ArrayList<CoupEchecs> listeCoup = new ArrayList<>();
+        ArrayList<Point> listeCoup = new ArrayList<>();
         for (Point pt : p.pointsPossibles())
         {
             CoupEchecs coup = new CoupEchecs(p, pt, joueur);
             if (coupValide(coup))
-                listeCoup.add(coup);
+                listeCoup.add(pt);
         }
         
         return listeCoup;
@@ -312,7 +319,7 @@ public class Echiquier
     
     public boolean coupValide(CoupEchecs coup)
     {
-        Piece p = coupsPossible(coup);
+        Piece p = coupsPossible(coup, false);
         if (p == null)
             return false;
 
