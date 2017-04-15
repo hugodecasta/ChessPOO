@@ -221,7 +221,11 @@ public class Echiquier
                         if (cibleNulle)
                         {
                             int yDepart = coup.piece.isBlanc() ? 1 : 6;  
-                            if (coup.sortie.y == coup.piece.pos.y + dir || coup.piece.pos.y == yDepart)
+                            boolean depUneCase = coup.sortie.y == coup.piece.pos.y + dir;
+                            Piece cibleInterm = depUneCase ? pieceCible : pointOccupe(new Point(coup.sortie.x, coup.sortie.y - dir));
+                            boolean cibleIntermNulle = cibleInterm == null || cibleInterm.isMange();
+                            
+                            if (depUneCase || cibleIntermNulle)
                                 res = coup.piece;
                             else
                                 return null;
