@@ -77,7 +77,7 @@ public class Echiquier
         
         int nbTour = 0;
         boolean roiPlace = false;
-        int xFou = -1;
+        int xFou = -1, nbFou = 0;
         for(int i=0;i<8;++i)
         {
             int rand = 0;
@@ -93,9 +93,20 @@ public class Echiquier
                             || xFou % 2 != i % 2)
                     {
                         xFou = i;
+                        nbFou++;
                         valide = true;
                     }
                 }
+                else if (i == 6)
+                { // on prévoit le placement du fou pour éviter les blocages sur la dernière case
+                    if (xFou != -1 
+                            && xFou % 2 != i % 2
+                            && nbFou < 2)
+                        valide = false;
+                }
+                
+                if (valide)
+                    break;
                 else if (p instanceof PieceTour)
                 {
                     if (nbTour == 0 || roiPlace)
