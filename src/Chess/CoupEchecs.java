@@ -14,10 +14,22 @@ public class CoupEchecs
     public Piece piece;
     public Point sortie;
     public JoueurEchecs joueur;
+    public boolean abandon, proposeNul;
+            
+    public CoupEchecs(JoueurEchecs joueur, boolean abandon, boolean proposeNul)
+    {
+        this(null,null,joueur,abandon,proposeNul);
+    }
     public CoupEchecs(Piece piece, Point sortie, JoueurEchecs joueur)
+    {
+        this(piece,sortie,joueur,false,false);
+    }
+    public CoupEchecs(Piece piece, Point sortie, JoueurEchecs joueur, boolean abandon, boolean proposeNul)
     {
         this.piece = piece;
         this.sortie = sortie;
         this.joueur = joueur;
+        this.abandon = abandon;
+        this.proposeNul = proposeNul;
     }
 }

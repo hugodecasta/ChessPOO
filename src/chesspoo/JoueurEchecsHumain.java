@@ -36,12 +36,13 @@ public class JoueurEchecsHumain extends JoueurEchecs
     @Override
     public CoupEchecs getCoup(Echiquier echiquier)
     {
+        proposeNul = false;
         compteur.start();
         abandon = false;
         echiquierG.resetSelections();
         
         Piece sPiece = null;
-        while(sPiece==null && !abandon)
+        while(sPiece==null && !abandon && !proposeNul)
         {
             sPiece = echiquierG.getPieceSelected();
             if((sPiece != null && sPiece.isBlanc() != isBlanc) || echiquierG.getCaseSelected()!=null)
@@ -49,8 +50,8 @@ public class JoueurEchecsHumain extends JoueurEchecs
                 sPiece = null;
                 echiquierG.resetSelections();
             }
-            if(abandon)
-                return null;
+            if(abandon || proposeNul)
+                return new CoupEchecs(this, abandon, proposeNul);
             //-----------------------
             try {
                 Thread.sleep(10);
@@ -63,11 +64,11 @@ public class JoueurEchecsHumain extends JoueurEchecs
         }
         
         Point sCase = null;
-        while(sCase==null && !abandon)
+        while(sCase==null && !abandon && !proposeNul)
         {
             sCase = echiquierG.getSelectedPoint();
-            if(abandon)
-                return null;
+            if(abandon || proposeNul)
+                return new CoupEchecs(this, abandon, proposeNul);
             //-----------------------
             try {
                 Thread.sleep(10);
@@ -78,8 +79,8 @@ public class JoueurEchecsHumain extends JoueurEchecs
             if(compteur.getTime()<=0)
                 abandonner();
         }
-        if(abandon)
-            return null;
+        if(abandon || proposeNul)
+            return new CoupEchecs(this, abandon, proposeNul);
         
         Piece p = echiquierG.getPieceSelected();
         Point pp = echiquierG.getSelectedPoint();

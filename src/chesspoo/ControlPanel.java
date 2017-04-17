@@ -23,6 +23,7 @@ import javafx.scene.text.Text;
 public class ControlPanel extends ElementGraphique
 {
     Text compteurB,compteurN;
+    ElementGraphique abandonBlanc, abandonNoir;
     Echecs jeu;
     
     public ControlPanel(int caseSize,Echecs jeu) {
@@ -47,9 +48,27 @@ public class ControlPanel extends ElementGraphique
         
         GButton but = new GButton(10,caseSize-50-5,100,50,"Abandon");
         GButton but2 = new GButton(10,sizeh-caseSize+5,100,50,"Abandon");
-        
         addFreeElement(but.getGraphics());
         addFreeElement(but2.getGraphics());
+        
+        GButton butt = new GButton(10+110,caseSize-50-5,150,50,"Proposer Nul");
+        GButton butt2 = new GButton(10+110,sizeh-caseSize+5,150,50,"Proposer Nul");
+        addFreeElement(butt.getGraphics());
+        addFreeElement(butt2.getGraphics());
+        
+        int tailleAbandon = caseSize-20;
+        abandonBlanc = new ElementGraphique(sizew-tailleAbandon-10, sizeh-tailleAbandon-10, tailleAbandon, 
+                Color.rgb(255, 0, 0), 
+                Color.rgb(255, 0, 0), 
+                Color.rgb(255, 0, 0));
+        abandonBlanc.setOpacity(0);        
+        addFreeElement(abandonBlanc.getGraphics());
+        abandonNoir = new ElementGraphique(sizew-tailleAbandon-10, 10, tailleAbandon, 
+                Color.rgb(255, 0, 0), 
+                Color.rgb(255, 0, 0), 
+                Color.rgb(255, 0, 0));
+        abandonNoir.setOpacity(0);        
+        addFreeElement(abandonNoir.getGraphics());
         
         new AnimationTimer()
         {
@@ -78,6 +97,25 @@ public class ControlPanel extends ElementGraphique
             }
         }
         );
+        
+        butt2.getGraphics().setOnMouseClicked(
+        new EventHandler<MouseEvent>()
+        {
+            public void handle(MouseEvent e)
+            {
+                jeu.getJoueurBlanc().proposerNul();
+            }
+        }
+        );
+        butt.getGraphics().setOnMouseClicked(
+        new EventHandler<MouseEvent>()
+        {
+            public void handle(MouseEvent e)
+            {
+                jeu.getJoueurNoir().proposerNul();
+            }
+        }
+        );
     }
     
     public void updateControles()
@@ -97,7 +135,29 @@ public class ControlPanel extends ElementGraphique
             compteurN.setFill(Color.gray(0.5));
             compteurB.setFill(Color.gray(1));
         }
+        
+        if(jeu.getJoueurBlanc().estProposeNul() && !oldBlancNul)
+        {
+            abandonBlanc.appear();
+            oldBlancNul = true;
+        }
+        else if(!jeu.getJoueurBlanc().estProposeNul() && oldBlancNul)
+        {
+            abandonBlanc.vanish();
+            oldBlancNul = false;
+        }
+        if(jeu.getJoueurNoir().estProposeNul() && !oldNoirNul)
+        {
+            abandonNoir.appear();
+            oldNoirNul = true;
+        }
+        else if(!jeu.getJoueurNoir().estProposeNul() && oldNoirNul)
+        {
+            abandonNoir.vanish();
+            oldNoirNul = false;
+        }
     }
+    boolean oldBlancNul,oldNoirNul;
     
     public String getTimeString(long secondes)
     {

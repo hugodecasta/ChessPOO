@@ -27,6 +27,7 @@ public class ElementGraphique
     protected boolean isSelected;
     protected int x,y,sizew,sizeh;
     protected float opacity;
+    public boolean appeared,appearing;
     Color selectedColor,hoverColor,unselectedColor;
     final Rectangle backRect;
     
@@ -39,6 +40,8 @@ public class ElementGraphique
     {
         this.sizew = sizew;
         this.sizeh = sizeh;
+        
+        appeared = true;
         
         pane = new StackPane();
         anPane = new AnchorPane();
@@ -98,6 +101,10 @@ public class ElementGraphique
     public void setOpacity(float opacity)
     {
         this.opacity = opacity;
+        if(opacity == 0)
+            appeared = false;
+        else if(opacity == 255)
+            appeared = true;
         pane.setOpacity(opacity);
     }
     public Pane getGraphics()
@@ -144,6 +151,7 @@ public class ElementGraphique
     }
     public void fade(boolean in)
     {        
+        appearing = true;
         new AnimationTimer()
         {
             int duration = 20;
@@ -156,6 +164,7 @@ public class ElementGraphique
             {
                 if(time == duration)
                 {
+                    appearing = false;
                     setOpacity(in?opacityGoal:1-opacityGoal);
                     this.stop();
                 }

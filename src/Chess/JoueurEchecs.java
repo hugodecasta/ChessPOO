@@ -12,7 +12,7 @@ package Chess;
 public abstract class JoueurEchecs
 {
     protected boolean isBlanc;
-    protected boolean abandon;
+    protected boolean abandon, proposeNul;
     protected CompteurEchecs compteur;
             
     public JoueurEchecs(boolean isBlanc)
@@ -43,5 +43,15 @@ public abstract class JoueurEchecs
     {
         abandon = true;
         compteur.pause();
+    }
+    
+    public void proposerNul()
+    {
+        proposeNul = true;
+    }
+    
+    public boolean estProposeNul()
+    {
+        return proposeNul;
     }
 }

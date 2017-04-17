@@ -56,6 +56,7 @@ public class Echecs
     {
         mode.initMode(this);
         joueurG = null;
+        boolean proposeNull = false;
         
         while(true)
         {
@@ -78,8 +79,22 @@ public class Echecs
             while(!pieceCoupPossible)
             {
                 CoupEchecs coup = joueur.getCoup(echiquier);
-                if(coup == null)
+                if(coup.abandon)
                     return mode.joueurSuivant();
+                else if(coup.proposeNul)
+                {
+                    joueur.compteur.pause();
+                    if(!proposeNull)
+                        proposeNull = true;
+                    else
+                        return null;
+                    pieceCoupPossible = true;
+                    continue;
+                }
+                else
+                {
+                    proposeNull = false;
+                }
                 pieceCoupPossible = echiquier.testeJoueCoup(coup);
             }
             estEnEchec = echiquier.echecAuRoi(joueur,true)?joueur:null;
