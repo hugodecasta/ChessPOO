@@ -75,17 +75,58 @@ public class Echiquier
         piB.add(new PieceRoi(new Point(0,0), true));
         piN.add(new PieceRoi(new Point(0,0), false));
         
+        int nbTour = 0;
+        boolean roiPlace = false;
+        int xFou = -1;
         for(int i=0;i<8;++i)
         {
-            int rand = (int)(Math.random()*piB.size());
+            int rand = 0;
+            boolean valide = false;
+            while(!valide)
+            {
+                rand = (int)(Math.random()*piB.size());
+                Piece p = piB.get(rand);
+                
+                if (p instanceof PieceFou)
+                {
+                    if (xFou == -1
+                            || xFou % 2 != i % 2)
+                    {
+                        xFou = i;
+                        valide = true;
+                    }
+                }
+                else if (p instanceof PieceTour)
+                {
+                    if (nbTour == 0 || roiPlace)
+                    {
+                        nbTour++;
+                        valide = true;
+                    }
+                }
+                else if (p instanceof PieceRoi)
+                {
+                    if (nbTour != 0)
+                    {
+                        roiPlace = true;
+                        valide = true;
+                    }
+                }
+                else
+                {
+                    valide = true;
+                }
+            }
+                
             piB.get(rand).pos = new Point(i,0);
             piN.get(rand).pos = new Point(i,7);
-            
+
             pieces.add(piB.get(rand));
             pieces.add(piN.get(rand));
-            
+
             piB.remove(rand);
             piN.remove(rand);
+            
         }
     }
     
