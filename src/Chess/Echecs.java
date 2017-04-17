@@ -83,13 +83,10 @@ public class Echecs
                     return mode.joueurSuivant();
                 else if(coup.proposeNul)
                 {
-                    joueur.compteur.pause();
                     if(!proposeNull)
                         proposeNull = true;
                     else
                         return null;
-                    pieceCoupPossible = true;
-                    continue;
                 }
                 else
                 {

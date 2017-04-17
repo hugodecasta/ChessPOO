@@ -42,7 +42,7 @@ public class JoueurEchecsHumain extends JoueurEchecs
         echiquierG.resetSelections();
         
         Piece sPiece = null;
-        while(sPiece==null && !abandon && !proposeNul)
+        while(sPiece==null && !abandon)
         {
             sPiece = echiquierG.getPieceSelected();
             if((sPiece != null && sPiece.isBlanc() != isBlanc) || echiquierG.getCaseSelected()!=null)
@@ -50,7 +50,7 @@ public class JoueurEchecsHumain extends JoueurEchecs
                 sPiece = null;
                 echiquierG.resetSelections();
             }
-            if(abandon || proposeNul)
+            if(abandon)
                 return new CoupEchecs(this, abandon, proposeNul);
             //-----------------------
             try {
@@ -64,10 +64,10 @@ public class JoueurEchecsHumain extends JoueurEchecs
         }
         
         Point sCase = null;
-        while(sCase==null && !abandon && !proposeNul)
+        while(sCase==null && !abandon)
         {
             sCase = echiquierG.getSelectedPoint();
-            if(abandon || proposeNul)
+            if(abandon)
                 return new CoupEchecs(this, abandon, proposeNul);
             //-----------------------
             try {
@@ -79,14 +79,14 @@ public class JoueurEchecsHumain extends JoueurEchecs
             if(compteur.getTime()<=0)
                 abandonner();
         }
-        if(abandon || proposeNul)
+        if(abandon)
             return new CoupEchecs(this, abandon, proposeNul);
         
         Piece p = echiquierG.getPieceSelected();
         Point pp = echiquierG.getSelectedPoint();
         echiquierG.resetSelections();
         compteur.pause();
-        return new CoupEchecs(p, pp, this);
+        return new CoupEchecs(p, pp, this,false, proposeNul);
         /*boolean colorGood = false;
         while(!colorGood)
         {
