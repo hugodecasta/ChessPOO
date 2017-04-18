@@ -277,7 +277,8 @@ public class Echiquier
                             Piece cibleInterm = depUneCase ? pieceCible : pointOccupe(new Point(coup.sortie.x, coup.sortie.y - dir));
                             boolean cibleIntermNulle = cibleInterm == null || cibleInterm.isMange();
                             
-                            if (depUneCase || cibleIntermNulle)
+                            if (depUneCase 
+                                    || (cibleIntermNulle && coup.piece.pos.y == yDepart))
                                 res = coup.piece;
                             else
                                 return null;

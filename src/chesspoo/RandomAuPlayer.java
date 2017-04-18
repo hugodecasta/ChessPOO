@@ -47,7 +47,7 @@ public class RandomAuPlayer extends JoueurEchecs
                 goods.add(p);
         ArrayList<Point> points = new ArrayList<>(0);
         Piece p = null;
-        while(points.size()==0)
+        while(points.isEmpty())
         {
             int randPiece = (int)(Math.random()*goods.size());
             p = goods.get(randPiece);
