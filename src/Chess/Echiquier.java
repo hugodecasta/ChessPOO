@@ -15,7 +15,6 @@ public class Echiquier
 {
     ArrayList<Piece> pieces;
     ArrayList<CoupEchecs> coups;
-    Piece pieceEnEchec;
     
     public Echiquier()
     {
@@ -167,11 +166,11 @@ public class Echiquier
             pieces.add(new PiecePion(new Point(i,yPion),estBlanc));
         }
     }
-    public Piece coupsPossible(CoupEchecs coup)
+    public Piece coupPossible(CoupEchecs coup)
     {
-        return coupsPossible(coup, true);
+        return Echiquier.this.coupPossible(coup, true);
     }
-    public Piece coupsPossible(CoupEchecs coup, boolean updatePiece)
+    public Piece coupPossible(CoupEchecs coup, boolean updatePiece)
     {
         if (coup.sortie.x < 0
                 || coup.sortie.x > 7
@@ -376,7 +375,7 @@ public class Echiquier
     
     public boolean coupValide(CoupEchecs coup)
     {
-        Piece p = coupsPossible(coup, false);
+        Piece p = Echiquier.this.coupPossible(coup, false);
         if (p == null)
             return false;
 
@@ -402,7 +401,7 @@ public class Echiquier
     
     public boolean testeJoueCoup(CoupEchecs coup)
     {
-        Piece p = coupsPossible(coup);
+        Piece p = coupPossible(coup);
         if (p == null)
             return false;
         
@@ -491,7 +490,7 @@ public class Echiquier
             if (p2.isBlanc() != couleurRoi)
             {
                 coupTemp.piece = p2;
-                if (coupsPossible(coupTemp) != null)
+                if (coupPossible(coupTemp) != null)
                 {
                     if(updateRoi)
                         roi.enEchec = true;
@@ -506,10 +505,6 @@ public class Echiquier
         return echecAuRoi(joueur, updateRoi, pieces);
     }
     
-    public Piece pieceEnEchec()
-    {
-        return pieceEnEchec;
-    }
     public boolean matOuPat(JoueurEchecs joueur)
     {
         ArrayList<Point> points = null;
@@ -525,7 +520,7 @@ public class Echiquier
                 for (Point pt : points)
                 {
                     coupTemp.sortie = pt; 
-                    Piece cible = coupsPossible(coupTemp);
+                    Piece cible = coupPossible(coupTemp);
                     if (cible != null)
                     {
                         p.pos = coupTemp.sortie;
