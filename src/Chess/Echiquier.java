@@ -514,7 +514,10 @@ public class Echiquier
         {
             if (p.isBlanc() == joueur.isBlanc)
             {
-                CoupEchecs coupTemp = new CoupEchecs(p, null, joueur);
+                if(!(CoupsValidesPiece(p, joueur).isEmpty()))                           
+                    return false;
+                
+                /*CoupEchecs coupTemp = new CoupEchecs(p, null, joueur);
                 Point oldPosPiece = (Point) p.pos.clone();
                 points = p.pointsPossibles();
                 for (Point pt : points)
@@ -539,13 +542,13 @@ public class Echiquier
 
                         if (!isEchec)
                         {
-                            /*System.out.println(p);
+                            System.out.println(p);
                             System.out.println(p.pos);
-                            System.out.println(coupTemp.sortie);*/
+                            System.out.println(coupTemp.sortie);
                             return false; // on a trouvé un coup sans échec
                         }
                     }
-                }
+                }*/
             }
         }
         return true; // mat ou pat
